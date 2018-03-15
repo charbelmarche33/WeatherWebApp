@@ -13,11 +13,16 @@ __________________________________________________
 - sudo apt-get install flask
 
 At this point you should be good. If not hmu and I'll try and help
-
-
+__________________________________________________________________
+##################################################################
+USEFUL STUFF FOR LATER
+##################################################################
 __________________________________________________________________
 For the calender widget im working on check out this site:
-
 https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/date
+__________________________________________________________________
+Setting a default date:
+https://www.w3schools.com/jsref/prop_date_value.asp
+
 
 
