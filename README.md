@@ -15,3 +15,9 @@ __________________________________________________
 At this point you should be good. If not hmu and I'll try and help
 
 
+__________________________________________________________________
+For the calender widget im working on check out this site:
+
+https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/date
+
+
