@@ -256,6 +256,10 @@ form textarea {
 /*
  * Reusable Components Style
  */
+.search_bar_wrapper {
+    width: 50% 
+}
+ 
 .button, form input[type="submit"], form button, form input[type="reset"] {
   border: none;
   background: #009ad8;
