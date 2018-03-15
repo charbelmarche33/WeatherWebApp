@@ -18,11 +18,15 @@ __________________________________________________________________
 USEFUL STUFF FOR LATER
 ##################################################################
 __________________________________________________________________
-For the calender widget im working on check out this site:
+For the calender widget im working on check out this site (Set max date min date etc):
 https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/date
 __________________________________________________________________
 Setting a default date:
 https://www.w3schools.com/jsref/prop_date_value.asp
+__________________________________________________________________
+Formatting calendar widget:
+https://codepen.io/tgrant54/pen/LFblv
+__________________________________________________________________
 
 
 
