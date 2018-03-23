@@ -10,7 +10,7 @@ __________________________________________________
 
 - sudo apt-get update
 - sudo apt-get install python-psycopg2
-- sudo apt-get install flask
+- sudo easy_install flask markdown 
 
 At this point you should be good. If not hmu and I'll try and help
 __________________________________________________________________
