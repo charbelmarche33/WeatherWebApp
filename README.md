@@ -15,6 +15,7 @@ __________________________________________________
 To start the postgreSQL server: Video here (https://www.youtube.com/watch?v=eTKzQWdw8pE)
 ___________________________________________________
 - sudo service postgresql start (you probably can use restart since I already started it)
+- sudo service postgresql restart
 
 To set the password for a user on the new DB (I already did this):
 _____________________________________________________________________
