@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-		<meta charset="UTF-8">
-		<meta http-equiv="X-UA-Compatible" content="IE=edge">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=1">
+		<meta charset="utf-8">
+    	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+    	<meta name="viewport" content="width=device-width, initial-scale=1">
 		
 		<title>Historical Weather-Easy Access</title>
 
@@ -50,23 +50,37 @@
 
 			<div class="hero" data-bg-image="static/images/banner.png">
 				<div class="container">
-					<form action="#" class="find-location">
+					{%if validLocation == False%}
+					<h3 style="color:#cc0000;background-color:#1e202b;">Invalid Location: Please enter a location in either the "city, state" format or as a 5 letter zipcode.</h3>
+					{% endif %}
+					{%if validDate ==  False%}
+					<h3 style="color:#cc0000;background-color:#1e202b;">Invalid Date: Please enter a future date in 'mm/dd/yyyy' format.</h3>
+					{% endif %}
+					<form method="post" action="/" class="find-location">
 						<table>
 							<!-- Make this a list-->
 							<tr>
 								<td>
-									<input type="text" size="50" placeholder="Enter a city and state, or a zipcode..."/>
+									<!--<input type="text" size="50" placeholder="Enter a city and state, or a zipcode..."/>-->
+									<input type="text" size="50" placeholder="Enter a city and state, or a zipcode..." name="locationInput" list="locations"/>
+									<datalist id="locations">
+									    {% for res in results %}
+										<option value="{{res[0]}}, {{res[1]}}">
+											<p>{{res[0]}}, {{res[1]}} {{res[2]}}</p>
+										</option>
+ 										{% endfor %}
+									</datalist>
 								</td>
 								<td>
 									<p> </p>
 								</td>
 								<td>
 									<div>
-										<input type="date" placeholder="Enter a future date..." size="50" style="width: 200%;padding: 20px 50px 20px 20px;background: #1e202b;color: white;"/>
+										<input type="date" name="dateInput" min="{{todaysDate}}" value="{{todaysDate}}" size="50" style="width: 200%;padding: 20px 50px 20px 20px;background: #1e202b;color: white;"/>
 									</div>
 								</td>
 								<td>
-									<input type="submit" value="Search For Weather Data!">
+									<input type="submit" name="weatherSearch" value="Search For Weather Data!">
 								</td>
 							</tr>
 						</table>

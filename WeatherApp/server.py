@@ -1,22 +1,89 @@
 import os, time, os.path, psycopg2, psycopg2.extras
 from flask import Flask, render_template, request
+#Need this for calendar widget
+import datetime
+#Need these lines so drop down by location will work
+import sys  
+
+reload(sys)  
+sys.setdefaultencoding('utf8')
+#Need these lines so drop down by location will work
 
 app = Flask(__name__)
 application = app
 
 password = False
 
-#def connectToDB():
-#    connectionString = 'dbname=contacts user=cuser password=123abc host=localhost'
-#    try:
-#        return psycopg2.connect(connectionString)
-#    except:
-#        print("Cannot connect to DB")
+def connectToDB():
+    connectionString = 'dbname=world user=weatherapp password=Password1 host=localhost'
+    try:
+        return psycopg2.connect(connectionString)
+    except:
+        print("Cannot connect to DB")
         
         
-@application.route('/')
+@application.route('/', methods=['GET', 'POST'])
 def mainIndex(): 
-    return render_template('index.html')
+    validDate = True
+    validLocation = True
+    now = datetime.datetime.now()
+    todaysDate = now.strftime("%Y-%m-%d")
+    conn = connectToDB()
+    curr = conn.cursor()
+    if request.method == 'POST':
+        try:
+            if request.form['weatherSearch']:
+                #Grab what is in the location field
+                location = request.form['locationInput']
+                date = request.form['dateInput']
+                print('Date: ' + date)
+                if date == '':
+                    #They entered an invalid date
+                    print("Invalid date")
+                    validDate = False
+                try:
+                    #Try and see if you can get anything in the city, state_id format (most will be this), format the string by delimiting by ','
+                    location = location.split(',')
+                    #If the location string had a comma in it
+                    if (len(location) > 1):
+                        #Then we should check and see if they formatted the input like King George, VA and remove the white space before 'VA'
+                        #The string would now be ['King George', ' VA'] we want ['King George', 'VA']
+                        if (location[1][0] == ' '):
+                            #If there is white space at the start of the string, splice it off
+                            location[1] = location[1][1:]
+                        #Run the query
+                        print(curr.mogrify("SELECT lat, lng FROM cities where city=%s and (state_id=%s or state_name=%s);", (location[0], location[1], location[1])))
+                        curr.execute("SELECT lat, lng FROM cities where city=%s and (state_id=%s or state_name=%s);", (location[0], location[1], location[1]))
+                    else:
+                        #Then user probably entered just a zip code
+                        if (len(location) == 5):
+                            #Necessary to get a zip for the ones that have many zips!
+                            wildCardedZipCode = '%'+location[0]+'%'
+                            print(curr.mogrify("SELECT lat, lng FROM cities where zip like %s;", (wildCardedZipCode, )))
+                            curr.execute("SELECT lat, lng FROM cities where zip like %s;", (wildCardedZipCode, ))
+                        else:
+                            #It was not a valid entry, please reenter, try and figure out how to do this message lol
+                            print("This was not a valid zip cause wrong number of numbers, who taught you to count")
+                            validLocation = False
+                    #If there is a result, then it was a valid entry
+                    if curr.fetchone():
+                        print("This was a valid input, good job")
+                        validLocation = True
+                    else:
+                        #It was not a valid entry, please reenter, try and figure out how to do this message lol
+                        print("This was not a valid input, damn youre stupid")
+                        validLocation = False
+                    
+                except:
+                    print("Error selecting information from people.") 
+        except:
+            print('There was an error accessing the table ')
+    try:
+        curr.execute("SELECT city, state_id, zip FROM cities;")
+    except:
+        print("Error selecting information from people.")
+    results = curr.fetchall();
+    return render_template('index.html', results=results, todaysDate=todaysDate, validDate=validDate, validLocation=validLocation)
     
     
 #Start the server here

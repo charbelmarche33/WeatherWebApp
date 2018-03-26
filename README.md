@@ -12,7 +12,29 @@ __________________________________________________
 - sudo apt-get install python-psycopg2
 - sudo easy_install flask markdown
 
-At this point you should be good. If not hmu and I'll try and help
+To start the postgreSQL server: Video here (https://www.youtube.com/watch?v=eTKzQWdw8pE)
+___________________________________________________
+- sudo service postgresql start (you probably can use restart since I already started it)
+
+To set the password for a user on the new DB (I already did this):
+_____________________________________________________________________
+- sudo sudo -u postgres psql
+- ^^(postgres is superuser, instead use weatherapp, now that it is created) > psql -U weatherapp -h localhost world
+- Enter a new password with "\password", then enter a password
+- Running the sql file to DB: \i cities.sql
+- Quit with "\q"
+
+Logging in:
+________________________________________
+- psql -U postgres -h localhost
+- ******PASSWORD IS "Password1"*******
+
+
+
+
+
+
+
 __________________________________________________________________
 ##################################################################
 USEFUL STUFF FOR LATER
