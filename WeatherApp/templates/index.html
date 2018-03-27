@@ -27,7 +27,7 @@
 		<div class="site-content">
 			<div class="site-header">
 				<div class="container">
-					<a href="index.html" class="branding">
+					<a href="/" class="branding">
 						<img src="static/images/logo.png" alt="" class="logo">
 						<div class="logo-type">
 							<h1 class="site-title">Historical Weather</h1>
@@ -39,8 +39,9 @@
 					<div class="main-navigation">
 						<button type="button" class="menu-toggle"><i class="fa fa-bars"></i></button>
 						<ul class="menu">
-							<li class="menu-item current-menu-item"><a href="index.html">Sign In</a></li>
-							<li class="menu-item current-menu-item"><a href="index.html">Sign Up</a></li>
+							<li class="menu-item current-menu-item"><a href="/">Sign In</a></li>
+							<li class="menu-item current-menu-item"><a href="/">Sign Up</a></li>
+							<li class="menu-item current-menu-item"><a href="/">About</a></li>
 						</ul> <!-- .menu -->
 					</div> <!-- .main-navigation -->
 
@@ -49,6 +50,7 @@
 				</div>
 			</div> <!-- .site-header -->
 
+		 	<!--****************Make a small instructions prompt here**************************-->
 			<div class="hero" data-bg-image="static/images/banner.png">
 				<div class="container">
 					{%if validLocation == False%}
