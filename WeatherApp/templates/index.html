@@ -69,7 +69,8 @@
 									<datalist id="locations">
 									    {% for res in results %}
 										<option value="{{res[0]}}, {{res[1]}}">
-											<p>{{res[0]}}, {{res[1]}} {{res[2]}}</p>
+											<p>{{res[0]}}, {{res[1]}}</p> 
+											<p style="font-size:0; visibility: hidden;"> {{res[2]}}</p>
 										</option>
  										{% endfor %}
 									</datalist>

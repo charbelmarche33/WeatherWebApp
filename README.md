@@ -30,6 +30,11 @@ ________________________________________
 - psql -U postgres -h localhost
 - ******PASSWORD IS "Password1"*******
 
+sudo service postgresql restart
+psql -U weatherapp -h localhost world
+Password1
+\i cities.sql
+
 
 
 
@@ -50,6 +55,6 @@ __________________________________________________________________
 Formatting calendar widget:
 https://codepen.io/tgrant54/pen/LFblv
 __________________________________________________________________
-
+Dark Sky API Key: d9929daf1c0c94de0546002bbcf12c5c
 
 

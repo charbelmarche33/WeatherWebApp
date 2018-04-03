@@ -1,9 +1,11 @@
-import os, time, os.path, psycopg2, psycopg2.extras
+import os, time, os.path, psycopg2, psycopg2.extras, requests
 from flask import Flask, render_template, request
 #Need this for calendar widget
 import datetime
 #Need these lines so drop down by location will work
 import sys  
+#Need for json.loads
+import json, ast
 
 reload(sys)  
 sys.setdefaultencoding('utf8')
@@ -13,6 +15,7 @@ app = Flask(__name__)
 application = app
 
 password = False
+key = "d9929daf1c0c94de0546002bbcf12c5c"
 
 def connectToDB():
     connectionString = 'dbname=world user=weatherapp password=Password1 host=localhost'
@@ -30,6 +33,7 @@ def mainIndex():
     todaysDate = now.strftime("%Y-%m-%d")
     conn = connectToDB()
     curr = conn.cursor()
+            
     if request.method == 'POST':
         try:
             if request.form['weatherSearch']:
@@ -66,22 +70,45 @@ def mainIndex():
                             print("This was not a valid zip cause wrong number of numbers, who taught you to count")
                             validLocation = False
                     #If there is a result, then it was a valid entry
-                    if curr.fetchone():
-                        print("This was a valid input, good job")
+                    latLong = curr.fetchone()
+                    if latLong:
+                        print(latLong)
+                        latitude = latLong[0]
+                        longitude = latLong[1]
+                        date = time.mktime(datetime.datetime.strptime(date, "%Y-%m-%d").timetuple())
                         validLocation = True
+                        try:
+                         #Allows you to access your JSON data easily within your code. Includes built in JSON decoder
+                            apiCall = "https://api.darksky.net/forecast/" + key + "/" + str(latitude) + "," + str(longitude) + "," + str(int(date)) + "?exclude=currently,minutely,hourly,alerts,flags"
+                            #Request to access API
+                            response = requests.get(apiCall)
+                            #Creates python dictionary w/unicode from JSON weather information from API
+                            weatherData = response.json()
+                            print type(weatherData)
+                            #Retrieves data from daily weatherData dictionary and turns it into a list (why though??)
+                            d = weatherData['daily']['data']
+                            print d
+                            print type(d)
+                            print ""
+                            #Turns dictionary into a list and gets rid of unicode
+                            dailyData = ast.literal_eval(json.dumps(d))
+                            print dailyData
+                            print("Succesfully retrieved data from python dictionary")
+                        except:
+                            print("Call to dictionary failed")
                     else:
                         #It was not a valid entry, please reenter, try and figure out how to do this message lol
-                        print("This was not a valid input, damn youre stupid")
+                        print("This was not a valid input.")
                         validLocation = False
                     
                 except:
-                    print("Error selecting information from people.") 
+                    print("Error selecting information from cities.") 
         except:
             print('There was an error accessing the table ')
     try:
         curr.execute("SELECT city, state_id, zip FROM cities;")
     except:
-        print("Error selecting information from people.")
+        print("Error selecting information from cities.")
     results = curr.fetchall();
     return render_template('index.html', results=results, todaysDate=todaysDate, validDate=validDate, validLocation=validLocation)
     
