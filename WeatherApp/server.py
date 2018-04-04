@@ -86,7 +86,7 @@ def mainIndex():
                             weatherData = response.json()
                             print type(weatherData)
                             #Retrieves data from daily weatherData dictionary and turns it into a list (why though??)
-                            d = weatherData['daily']['data']
+                            d = weatherData['daily']['data'][0]
                             print d
                             print type(d)
                             print ""
