@@ -1,33 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="utf-8">
-    	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-    	<meta name="viewport" content="width=device-width, initial-scale=1">
-		
-		<title>Historical Weather-Easy Access</title>
 
-		<!-- Loading third party fonts -->
-		<link href="http://fonts.googleapis.com/css?family=Roboto:300,400,700|" rel="stylesheet" type="text/css">
-		<link href="static/fonts/font-awesome.min.css" rel="stylesheet" type="text/css">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 
-		<!-- Loading main css file -->
-		<link rel="stylesheet" href="static/css/style.css">
-		
-		<!--[if lt IE 9]>
+	<title>Historical Weather-Easy Access</title>
+	
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+	<!-- Loading third party fonts -->
+	<link href="http://fonts.googleapis.com/css?family=Roboto:300,400,700|" rel="stylesheet" type="text/css">
+	<link href="static/fonts/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+	<!-- Loading main css file -->
+	<link rel="stylesheet" href="static/css/style.css">
+
+	<!--[if lt IE 9]>
 		<script src="js/ie-support/html5.js"></script>
 		<script src="js/ie-support/respond.js"></script>
 		<![endif]-->
 
-	</head>
+</head>
 
 
-	<body>
-		
-		<div class="site-content">
-			<div class="site-header">
-				<div class="container">
-					<a href="/" class="branding">
+<body>
+
+	<div class="site-content">
+		<div class="site-header">
+			<div class="container">
+				<a href="/" class="branding">
 						<img src="static/images/logo.png" alt="" class="logo">
 						<div class="logo-type">
 							<h1 class="site-title">Historical Weather</h1>
@@ -35,38 +38,41 @@
 						</div>
 					</a>
 
-					<!-- Default snippet for navigation -->
-					<div class="main-navigation">
-						<button type="button" class="menu-toggle"><i class="fa fa-bars"></i></button>
-						<ul class="menu">
-							<li class="menu-item current-menu-item"><a href="/">Sign In</a></li>
-							<li class="menu-item current-menu-item"><a href="/">Sign Up</a></li>
-							<li class="menu-item current-menu-item"><a href="/">About</a></li>
-						</ul> <!-- .menu -->
-					</div> <!-- .main-navigation -->
-
-					<div class="mobile-navigation"></div>
-
+				<!-- Default snippet for navigation -->
+				<div class="main-navigation">
+					<button type="button" class="menu-toggle"><i class="fa fa-bars"></i></button>
+					<ul class="menu">
+						<li class="menu-item current-menu-item"><a data-toggle="modal" data-target="#loginModal">Sign In</a></li>
+						<!--<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">Launch demo modal</button>-->
+						<li class="menu-item current-menu-item"><a href="/">Sign Up</a></li>
+						<li class="menu-item current-menu-item"><a href="/">About</a></li>
+					</ul>
+					<!-- .menu -->
 				</div>
-			</div> <!-- .site-header -->
+				<!-- .main-navigation -->
 
-		 	<!--****************Make a small instructions prompt here**************************-->
-			<div class="hero" data-bg-image="static/images/banner.png">
-				<div class="container">
-					{%if validLocation == False%}
-					<h3 style="color:#cc0000;background-color:#1e202b;">Invalid Location: Please enter a location in either the "city, state" format or as a 5 letter zipcode.</h3>
-					{% endif %}
-					{%if validDate ==  False%}
-					<h3 style="color:#cc0000;background-color:#1e202b;">Invalid Date: Please enter a future date in 'mm/dd/yyyy' format.</h3>
-					{% endif %}
-					<form method="post" action="/" class="find-location">
-						<table>
-							<!-- Make this a list-->
-							<tr>
-								<td>
-									<!--<input type="text" size="50" placeholder="Enter a city and state, or a zipcode..."/>-->
-									<input type="text" size="50" placeholder="Enter a city and state, or a zipcode..." name="locationInput" list="locations"/>
-									<datalist id="locations">
+				<div class="mobile-navigation"></div>
+
+			</div>
+		</div>
+		<!-- .site-header -->
+
+		<!--****************Make a small instructions prompt here**************************-->
+		<div class="hero" data-bg-image="static/images/banner.png">
+			<div class="container">
+				{%if validLocation == False%}
+				<h3 style="color:#cc0000;background-color:#1e202b;">Invalid Location: Please enter a location in either the "city, state" format or as a 5 letter zipcode.</h3>
+				{% endif %} {%if validDate == False%}
+				<h3 style="color:#cc0000;background-color:#1e202b;">Invalid Date: Please enter a future date in 'mm/dd/yyyy' format.</h3>
+				{% endif %}
+				<form method="post" action="/" class="find-location">
+					<table>
+						<!-- Make this a list-->
+						<tr>
+							<td>
+								<!--<input type="text" size="50" placeholder="Enter a city and state, or a zipcode..."/>-->
+								<input type="text" size="50" placeholder="Enter a city and state, or a zipcode..." name="locationInput" list="locations" />
+								<datalist id="locations">
 									    {% for res in results %}
 										<option value="{{res[0]}}, {{res[1]}}">
 											<p>{{res[0]}}, {{res[1]}}</p> 
@@ -74,264 +80,313 @@
 										</option>
  										{% endfor %}
 									</datalist>
-								</td>
-								<td>
-									<p> </p>
-								</td>
-								<td>
-									<div>
-										<input type="date" name="dateInput" min="{{todaysDate}}" value="{{todaysDate}}" size="50" style="width: 200%;padding: 20px 50px 20px 20px;background: #1e202b;color: white;"/>
-									</div>
-								</td>
-								<td>
-									<input type="submit" name="weatherSearch" value="Search For Weather Data!">
-								</td>
-							</tr>
-						</table>
-					</form>
+							</td>
+							<td>
+								<p> </p>
+							</td>
+							<td>
+								<div>
+									<input type="date" name="dateInput" min="{{todaysDate}}" value="{{todaysDate}}" size="50" style="width: 200%;padding: 20px 50px 20px 20px;background: #1e202b;color: white;" />
+								</div>
+							</td>
+							<td>
+								<input type="submit" name="weatherSearch" value="Search For Weather Data!">
+							</td>
+						</tr>
+					</table>
+				</form>
 
+			</div>
+		</div>
+		<div class="forecast-table">
+			<div class="container">
+				<div class="forecast-container">
+					<div class="today forecast">
+						<div class="forecast-header">
+							<div class="day">Monday</div>
+							<div class="date">6 Oct</div>
+						</div>
+						<!-- .forecast-header -->
+						<div class="forecast-content">
+							<div class="location">New York</div>
+							<div class="degree">
+								<div class="num">23<sup>o</sup>C</div>
+								<div class="forecast-icon">
+									<img src="static/images/icons/icon-1.svg" alt="" width=90>
+								</div>
+							</div>
+							<span><img src="static/images/icon-umberella.png" alt="">20%</span>
+							<span><img src="static/images/icon-wind.png" alt="">18km/h</span>
+							<span><img src="static/images/icon-compass.png" alt="">East</span>
+						</div>
+					</div>
+					<div class="forecast">
+						<div class="forecast-header">
+							<div class="day">Tuesday</div>
+						</div>
+						<!-- .forecast-header -->
+						<div class="forecast-content">
+							<div class="forecast-icon">
+								<img src="static/images/icons/icon-3.svg" alt="" width=48>
+							</div>
+							<div class="degree">23<sup>o</sup>C</div>
+							<small>18<sup>o</sup></small>
+						</div>
+					</div>
+					<div class="forecast">
+						<div class="forecast-header">
+							<div class="day">Wednesday</div>
+						</div>
+						<!-- .forecast-header -->
+						<div class="forecast-content">
+							<div class="forecast-icon">
+								<img src="static/images/icons/icon-5.svg" alt="" width=48>
+							</div>
+							<div class="degree">23<sup>o</sup>C</div>
+							<small>18<sup>o</sup></small>
+						</div>
+					</div>
+					<div class="forecast">
+						<div class="forecast-header">
+							<div class="day">Thursday</div>
+						</div>
+						<!-- .forecast-header -->
+						<div class="forecast-content">
+							<div class="forecast-icon">
+								<img src="static/images/icons/icon-7.svg" alt="" width=48>
+							</div>
+							<div class="degree">23<sup>o</sup>C</div>
+							<small>18<sup>o</sup></small>
+						</div>
+					</div>
+					<div class="forecast">
+						<div class="forecast-header">
+							<div class="day">Friday</div>
+						</div>
+						<!-- .forecast-header -->
+						<div class="forecast-content">
+							<div class="forecast-icon">
+								<img src="static/images/icons/icon-12.svg" alt="" width=48>
+							</div>
+							<div class="degree">23<sup>o</sup>C</div>
+							<small>18<sup>o</sup></small>
+						</div>
+					</div>
+					<div class="forecast">
+						<div class="forecast-header">
+							<div class="day">Saturday</div>
+						</div>
+						<!-- .forecast-header -->
+						<div class="forecast-content">
+							<div class="forecast-icon">
+								<img src="static/images/icons/icon-13.svg" alt="" width=48>
+							</div>
+							<div class="degree">23<sup>o</sup>C</div>
+							<small>18<sup>o</sup></small>
+						</div>
+					</div>
+					<div class="forecast">
+						<div class="forecast-header">
+							<div class="day">Sunday</div>
+						</div>
+						<!-- .forecast-header -->
+						<div class="forecast-content">
+							<div class="forecast-icon">
+								<img src="static/images/icons/icon-14.svg" alt="" width=48>
+							</div>
+							<div class="degree">23<sup>o</sup>C</div>
+							<small>18<sup>o</sup></small>
+						</div>
+					</div>
 				</div>
 			</div>
-			<div class="forecast-table">
+		</div>
+		<main class="main-content">
+			<div class="fullwidth-block">
 				<div class="container">
-					<div class="forecast-container">
-						<div class="today forecast">
-							<div class="forecast-header">
-								<div class="day">Monday</div>
-								<div class="date">6 Oct</div>
-							</div> <!-- .forecast-header -->
-							<div class="forecast-content">
-								<div class="location">New York</div>
-								<div class="degree">
-									<div class="num">23<sup>o</sup>C</div>
-									<div class="forecast-icon">
-										<img src="static/images/icons/icon-1.svg" alt="" width=90>
-									</div>	
-								</div>
-								<span><img src="static/images/icon-umberella.png" alt="">20%</span>
-								<span><img src="static/images/icon-wind.png" alt="">18km/h</span>
-								<span><img src="static/images/icon-compass.png" alt="">East</span>
+					<h2 class="section-title">Live cameras</h2>
+					<div class="row">
+						<div class="col-md-3 col-sm-6">
+							<div class="live-camera">
+								<figure class="live-camera-cover"><img src="static/images/live-camera-1.jpg" alt=""></figure>
+								<h3 class="location">New York</h3>
+								<small class="date">8 oct, 8:00AM</small>
 							</div>
 						</div>
-						<div class="forecast">
-							<div class="forecast-header">
-								<div class="day">Tuesday</div>
-							</div> <!-- .forecast-header -->
-							<div class="forecast-content">
-								<div class="forecast-icon">
-									<img src="static/images/icons/icon-3.svg" alt="" width=48>
-								</div>
-								<div class="degree">23<sup>o</sup>C</div>
-								<small>18<sup>o</sup></small>
+						<div class="col-md-3 col-sm-6">
+							<div class="live-camera">
+								<figure class="live-camera-cover"><img src="static/images/live-camera-2.jpg" alt=""></figure>
+								<h3 class="location">Los Angeles</h3>
+								<small class="date">8 oct, 8:00AM</small>
 							</div>
 						</div>
-						<div class="forecast">
-							<div class="forecast-header">
-								<div class="day">Wednesday</div>
-							</div> <!-- .forecast-header -->
-							<div class="forecast-content">
-								<div class="forecast-icon">
-									<img src="static/images/icons/icon-5.svg" alt="" width=48>
-								</div>
-								<div class="degree">23<sup>o</sup>C</div>
-								<small>18<sup>o</sup></small>
+						<div class="col-md-3 col-sm-6">
+							<div class="live-camera">
+								<figure class="live-camera-cover"><img src="static/images/live-camera-3.jpg" alt=""></figure>
+								<h3 class="location">Chicago</h3>
+								<small class="date">8 oct, 8:00AM</small>
 							</div>
 						</div>
-						<div class="forecast">
-							<div class="forecast-header">
-								<div class="day">Thursday</div>
-							</div> <!-- .forecast-header -->
-							<div class="forecast-content">
-								<div class="forecast-icon">
-									<img src="static/images/icons/icon-7.svg" alt="" width=48>
-								</div>
-								<div class="degree">23<sup>o</sup>C</div>
-								<small>18<sup>o</sup></small>
-							</div>
-						</div>
-						<div class="forecast">
-							<div class="forecast-header">
-								<div class="day">Friday</div>
-							</div> <!-- .forecast-header -->
-							<div class="forecast-content">
-								<div class="forecast-icon">
-									<img src="static/images/icons/icon-12.svg" alt="" width=48>
-								</div>
-								<div class="degree">23<sup>o</sup>C</div>
-								<small>18<sup>o</sup></small>
-							</div>
-						</div>
-						<div class="forecast">
-							<div class="forecast-header">
-								<div class="day">Saturday</div>
-							</div> <!-- .forecast-header -->
-							<div class="forecast-content">
-								<div class="forecast-icon">
-									<img src="static/images/icons/icon-13.svg" alt="" width=48>
-								</div>
-								<div class="degree">23<sup>o</sup>C</div>
-								<small>18<sup>o</sup></small>
-							</div>
-						</div>
-						<div class="forecast">
-							<div class="forecast-header">
-								<div class="day">Sunday</div>
-							</div> <!-- .forecast-header -->
-							<div class="forecast-content">
-								<div class="forecast-icon">
-									<img src="static/images/icons/icon-14.svg" alt="" width=48>
-								</div>
-								<div class="degree">23<sup>o</sup>C</div>
-								<small>18<sup>o</sup></small>
+						<div class="col-md-3 col-sm-6">
+							<div class="live-camera">
+								<figure class="live-camera-cover"><img src="static/images/live-camera-4.jpg" alt=""></figure>
+								<h3 class="location">London</h3>
+								<small class="date">8 oct, 8:00AM</small>
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
-			<main class="main-content">
-				<div class="fullwidth-block">
-					<div class="container">
-						<h2 class="section-title">Live cameras</h2>
-						<div class="row">
-							<div class="col-md-3 col-sm-6">
-								<div class="live-camera">
-									<figure class="live-camera-cover"><img src="static/images/live-camera-1.jpg" alt=""></figure>
-									<h3 class="location">New York</h3>
-									<small class="date">8 oct, 8:00AM</small>
-								</div>
-							</div>
-							<div class="col-md-3 col-sm-6">
-								<div class="live-camera">
-									<figure class="live-camera-cover"><img src="static/images/live-camera-2.jpg" alt=""></figure>
-									<h3 class="location">Los Angeles</h3>
-									<small class="date">8 oct, 8:00AM</small>
-								</div>
-							</div>
-							<div class="col-md-3 col-sm-6">
-								<div class="live-camera">
-									<figure class="live-camera-cover"><img src="static/images/live-camera-3.jpg" alt=""></figure>
-									<h3 class="location">Chicago</h3>
-									<small class="date">8 oct, 8:00AM</small>
-								</div>
-							</div>
-							<div class="col-md-3 col-sm-6">
-								<div class="live-camera">
-									<figure class="live-camera-cover"><img src="static/images/live-camera-4.jpg" alt=""></figure>
-									<h3 class="location">London</h3>
-									<small class="date">8 oct, 8:00AM</small>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
 
-				<div class="fullwidth-block" data-bg-color="#262936">
-					<div class="container">
-						<div class="row">
-							<div class="col-md-4">
-								<div class="news">
-									<div class="date">06.10</div>
-									<h3><a href="#">Doloremque laudantium totam sequi </a></h3>
-									<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Illo saepe assumenda dolorem modi, expedita voluptatum ducimus necessitatibus. Asperiores quod reprehenderit necessitatibus harum, mollitia, odit et consequatur maxime nisi amet doloremque.</p>
-								</div>
-							</div>
-							<div class="col-md-4">
-								<div class="news">
-									<div class="date">06.10</div>
-									<h3><a href="#">Doloremque laudantium totam sequi </a></h3>
-									<p>Nobis architecto consequatur ab, ea, eum autem aperiam accusantium placeat vitae facere explicabo temporibus minus distinctio cum optio quis, dignissimos eius aspernatur fuga. Praesentium totam, corrupti beatae amet expedita veritatis.</p>
-								</div>
-							</div>
-							<div class="col-md-4">
-								<div class="news">
-									<div class="date">06.10</div>
-									<h3><a href="#">Doloremque laudantium totam sequi </a></h3>
-									<p>Enim impedit officiis placeat qui recusandae doloremque possimus, iusto blanditiis, quam optio delectus maiores. Possimus rerum, velit cum natus eos. Cumque pariatur beatae asperiores, esse libero quas ad dolorem. Voluptates.</p>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-
-				<div class="fullwidth-block">
-					<div class="container">
-						<div class="row">
-							<div class="col-md-4">
-								<h2 class="section-title">Application features</h2>
-								<ul class="arrow-feature">
-									<li>
-										<h3>Natus error sit voluptatem accusantium</h3>
-										<p>Doloremque laudantium totam rem aperiam Inventore veritatis et quasi architecto beatae vitae.</p>
-									</li>
-									<li>
-										<h3>Natus error sit voluptatem accusantium</h3>
-										<p>Doloremque laudantium totam rem aperiam Inventore veritatis et quasi architecto beatae vitae.</p>
-									</li>
-									<li>
-										<h3>Natus error sit voluptatem accusantium</h3>
-										<p>Doloremque laudantium totam rem aperiam Inventore veritatis et quasi architecto beatae vitae.</p>
-									</li>
-								</ul>
-							</div>
-							<div class="col-md-4">
-								<h2 class="section-title">Weather analyssis</h2>
-								<ul class="arrow-list">
-									<li><a href="#">Accusantium doloremque laudantium rem aperiam</a></li>
-									<li><a href="#">Eaque ipsa quae ab illo inventore veritatis quasi</a></li>
-									<li><a href="#">Architecto beatae vitae dicta sunt explicabo</a></li>
-									<li><a href="#">Nemo enim ipsam voluptatem quia voluptas</a></li>
-									<li><a href="#">Aspernatur aut odit aut fugit, sed quia consequuntur</a></li>
-									<li><a href="#">Magni dolores eos qui ratione voluptatem sequi</a></li>
-									<li><a href="#">Neque porro quisquam est qui dolorem ipsum quia</a></li>
-								</ul>
-							</div>
-							<div class="col-md-4">
-								<h2 class="section-title">Awesome Photos</h2>
-								<div class="photo-grid">
-									<a href="#"><img src="static/images/thumb-1.jpg" alt="#"></a>
-									<a href="#"><img src="static/images/thumb-2.jpg" alt="#"></a>
-									<a href="#"><img src="static/images/thumb-3.jpg" alt="#"></a>
-									<a href="#"><img src="static/images/thumb-4.jpg" alt="#"></a>
-									<a href="#"><img src="static/images/thumb-5.jpg" alt="#"></a>
-									<a href="#"><img src="static/images/thumb-6.jpg" alt="#"></a>
-									<a href="#"><img src="static/images/thumb-7.jpg" alt="#"></a>
-									<a href="#"><img src="static/images/thumb-8.jpg" alt="#"></a>
-									<a href="#"><img src="static/images/thumb-9.jpg" alt="#"></a>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</main> <!-- .main-content -->
-
-			<footer class="site-footer">
+			<div class="fullwidth-block" data-bg-color="#262936">
 				<div class="container">
 					<div class="row">
-						<div class="col-md-8">
-							<form action="#" class="subscribe-form">
-								<input type="text" placeholder="Enter your email to subscribe...">
-								<input type="submit" value="Subscribe">
-							</form>
+						<div class="col-md-4">
+							<div class="news">
+								<div class="date">06.10</div>
+								<h3><a href="#">Doloremque laudantium totam sequi </a></h3>
+								<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Illo saepe assumenda dolorem modi, expedita voluptatum ducimus necessitatibus. Asperiores quod reprehenderit necessitatibus harum, mollitia, odit et consequatur maxime nisi amet doloremque.</p>
+							</div>
 						</div>
-						<div class="col-md-3 col-md-offset-1">
-							<div class="social-links">
-								<a href="#"><i class="fa fa-facebook"></i></a>
-								<a href="#"><i class="fa fa-twitter"></i></a>
-								<a href="#"><i class="fa fa-google-plus"></i></a>
-								<a href="#"><i class="fa fa-pinterest"></i></a>
+						<div class="col-md-4">
+							<div class="news">
+								<div class="date">06.10</div>
+								<h3><a href="#">Doloremque laudantium totam sequi </a></h3>
+								<p>Nobis architecto consequatur ab, ea, eum autem aperiam accusantium placeat vitae facere explicabo temporibus minus distinctio cum optio quis, dignissimos eius aspernatur fuga. Praesentium totam, corrupti beatae amet expedita veritatis.</p>
+							</div>
+						</div>
+						<div class="col-md-4">
+							<div class="news">
+								<div class="date">06.10</div>
+								<h3><a href="#">Doloremque laudantium totam sequi </a></h3>
+								<p>Enim impedit officiis placeat qui recusandae doloremque possimus, iusto blanditiis, quam optio delectus maiores. Possimus rerum, velit cum natus eos. Cumque pariatur beatae asperiores, esse libero quas ad dolorem. Voluptates.</p>
 							</div>
 						</div>
 					</div>
-
-					<p class="colophon">Copyright 2014 Company name. Designed by Themezy. All rights reserved</p>
 				</div>
-			</footer> <!-- .site-footer -->
-		</div>
-		
-		<script src="static/js/jquery-1.11.1.min.js"></script>
-		<script src="static/js/plugins.js"></script>
-		<script src="static/js/app.js"></script>
-		
-	</body>
+			</div>
+
+			<div class="fullwidth-block">
+				<div class="container">
+					<div class="row">
+						<div class="col-md-4">
+							<h2 class="section-title">Application features</h2>
+							<ul class="arrow-feature">
+								<li>
+									<h3>Natus error sit voluptatem accusantium</h3>
+									<p>Doloremque laudantium totam rem aperiam Inventore veritatis et quasi architecto beatae vitae.</p>
+								</li>
+								<li>
+									<h3>Natus error sit voluptatem accusantium</h3>
+									<p>Doloremque laudantium totam rem aperiam Inventore veritatis et quasi architecto beatae vitae.</p>
+								</li>
+								<li>
+									<h3>Natus error sit voluptatem accusantium</h3>
+									<p>Doloremque laudantium totam rem aperiam Inventore veritatis et quasi architecto beatae vitae.</p>
+								</li>
+							</ul>
+						</div>
+						<div class="col-md-4">
+							<h2 class="section-title">Weather analyssis</h2>
+							<ul class="arrow-list">
+								<li><a href="#">Accusantium doloremque laudantium rem aperiam</a></li>
+								<li><a href="#">Eaque ipsa quae ab illo inventore veritatis quasi</a></li>
+								<li><a href="#">Architecto beatae vitae dicta sunt explicabo</a></li>
+								<li><a href="#">Nemo enim ipsam voluptatem quia voluptas</a></li>
+								<li><a href="#">Aspernatur aut odit aut fugit, sed quia consequuntur</a></li>
+								<li><a href="#">Magni dolores eos qui ratione voluptatem sequi</a></li>
+								<li><a href="#">Neque porro quisquam est qui dolorem ipsum quia</a></li>
+							</ul>
+						</div>
+						<div class="col-md-4">
+							<h2 class="section-title">Awesome Photos</h2>
+							<div class="photo-grid">
+								<a href="#"><img src="static/images/thumb-1.jpg" alt="#"></a>
+								<a href="#"><img src="static/images/thumb-2.jpg" alt="#"></a>
+								<a href="#"><img src="static/images/thumb-3.jpg" alt="#"></a>
+								<a href="#"><img src="static/images/thumb-4.jpg" alt="#"></a>
+								<a href="#"><img src="static/images/thumb-5.jpg" alt="#"></a>
+								<a href="#"><img src="static/images/thumb-6.jpg" alt="#"></a>
+								<a href="#"><img src="static/images/thumb-7.jpg" alt="#"></a>
+								<a href="#"><img src="static/images/thumb-8.jpg" alt="#"></a>
+								<a href="#"><img src="static/images/thumb-9.jpg" alt="#"></a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</main>
+		<!-- .main-content -->
+
+		<footer class="site-footer">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-8">
+						<form action="#" class="subscribe-form">
+							<input type="text" placeholder="Enter your email to subscribe...">
+							<input type="submit" value="Subscribe">
+						</form>
+					</div>
+					<div class="col-md-3 col-md-offset-1">
+						<div class="social-links">
+							<a href="#"><i class="fa fa-facebook"></i></a>
+							<a href="#"><i class="fa fa-twitter"></i></a>
+							<a href="#"><i class="fa fa-google-plus"></i></a>
+							<a href="#"><i class="fa fa-pinterest"></i></a>
+						</div>
+					</div>
+				</div>
+
+				<p class="colophon">Copyright 2014 Company name. Designed by Themezy. All rights reserved</p>
+			</div>
+		</footer>
+		<!-- .site-footer -->
+	</div>
+
+		<!--Login model-->
+	<div id="loginModal" class="modal fade" style="">
+
+    <div class="modal-dialog" style="position: relative;  top: 137px;width:1000px;height:350px;">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Login</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        </div>
+        <div class="modal-body">
+          <form method="post" class="form col-md-12 center-block" action="/">
+            <div class="form-group">
+              <input type="text" class="form-control input-lg" name="userName" placeholder="Username">
+            </div>
+            <div class="form-group">
+              <input type="password" class="form-control input-lg" name="pw" placeholder="Password">
+            </div>
+            <div class="form-group">
+              <button class="btn btn-primary btn-lg btn-block">Sign In</button>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <form action="/">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+      <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+  </div>
+  <!-- /.modal -->
+
+	<!-- Bootstrap core JavaScript -->
+  	<script src="static/jquery/jquery.min.js"></script>
+  	<script src="static/bootstrap/js/bootstrap.bundle.min.js"></script>
+	<script src="static/js/jquery-1.11.1.min.js"></script>
+	<script src="static/js/plugins.js"></script>
+	<script src="static/js/app.js"></script>
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+	
+
+</body>
 
 </html>

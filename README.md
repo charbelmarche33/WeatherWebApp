@@ -56,5 +56,8 @@ Formatting calendar widget:
 https://codepen.io/tgrant54/pen/LFblv
 __________________________________________________________________
 Dark Sky API Key: d9929daf1c0c94de0546002bbcf12c5c
+__________________________________________________________________
+For creating Charts
+https://www.chartjs.org/
 
 

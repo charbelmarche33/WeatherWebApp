@@ -84,16 +84,12 @@ def mainIndex():
                             response = requests.get(apiCall)
                             #Creates python dictionary w/unicode from JSON weather information from API
                             weatherData = response.json()
-                            print type(weatherData)
                             #Retrieves data from daily weatherData dictionary and turns it into a list (why though??)
-                            d = weatherData['daily']['data'][0]
-                            print d
-                            print type(d)
-                            print ""
-                            #Turns dictionary into a list and gets rid of unicode
-                            dailyData = ast.literal_eval(json.dumps(d))
-                            print dailyData
-                            print("Succesfully retrieved data from python dictionary")
+                            dailyData = weatherData['daily']['data'][0]
+                            #This is an example of accessing a key.
+                            print(dailyData['summary'])
+                            
+                            
                         except:
                             print("Call to dictionary failed")
                     else:
