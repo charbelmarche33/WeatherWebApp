@@ -33,7 +33,14 @@ def mainIndex():
     todaysDate = now.strftime("%Y-%m-%d")
     conn = connectToDB()
     curr = conn.cursor()
-            
+    lowTemp = {}
+    highTemp = {}
+    precip = {}
+    wind = {}
+    humidity = {}
+    currentTemp = {}
+    location = ""
+    
     if request.method == 'POST':
         try:
             if request.form['weatherSearch']:
@@ -48,6 +55,7 @@ def mainIndex():
                 try:
                     #Try and see if you can get anything in the city, state_id format (most will be this), format the string by delimiting by ','
                     location = location.split(',')
+                    print type(location)
                     #If the location string had a comma in it
                     if (len(location) > 1):
                         #Then we should check and see if they formatted the input like King George, VA and remove the white space before 'VA'
@@ -79,16 +87,35 @@ def mainIndex():
                         validLocation = True
                         try:
                          #Allows you to access your JSON data easily within your code. Includes built in JSON decoder
-                            apiCall = "https://api.darksky.net/forecast/" + key + "/" + str(latitude) + "," + str(longitude) + "," + str(int(date)) + "?exclude=currently,minutely,hourly,alerts,flags"
+                            apiCall = "https://api.darksky.net/forecast/" + key + "/" + str(latitude) + "," + str(longitude) + "," + str(int(date)) + "?exclude=minutely,hourly,alerts,flags"
                             #Request to access API
                             response = requests.get(apiCall)
                             #Creates python dictionary w/unicode from JSON weather information from API
-                            weatherData = response.json()
-                            #Retrieves data from daily weatherData dictionary and turns it into a list (why though??)
-                            dailyData = weatherData['daily']['data'][0]
-                            #This is an example of accessing a key.
-                            print(dailyData['summary'])
+                            weatherData = response.json() 
                             
+                            #Throw into an if loop for current day:
+                            #for next day use dailyData2 = weatherData['daily']['data'][1]
+                        #if date == todaysDate:
+                            #Daily data information
+                            dailyData = weatherData['daily']['data'][0]
+                            #Currently data information
+                            currentData = weatherData['currently']
+                            #Retrieving a current temperature
+                            currentTemp = currentData['temperature']
+                                
+                            lowTemp = dailyData['temperatureLow']                   #Degrees Farenheit
+                            highTemp = dailyData['temperatureHigh']                 #Degrees Farenheit
+                            #averageTemp = []
+                            precip = dailyData['precipProbability'] * 100           # percentage
+                            wind = dailyData['windSpeed']                           # miles/hour
+                            humidity = dailyData['humidity'] * 100                  # percentage
+                            
+                            print("Low Temperature: " + str(lowTemp))
+                            print("High Temperature: " + str(highTemp))
+                            print("Precipitation: " + str(precip) + "%")
+                            print("Wind Speed: " + str(wind) + " mph")
+                            print("Humidity: " + str(humidity) + "%")
+                            print("Current Temperature: " + str(currentTemp))
                             
                         except:
                             print("Call to dictionary failed")
@@ -106,7 +133,10 @@ def mainIndex():
     except:
         print("Error selecting information from cities.")
     results = curr.fetchall();
-    return render_template('index.html', results=results, todaysDate=todaysDate, validDate=validDate, validLocation=validLocation)
+    return render_template('index.html', results=results, todaysDate=todaysDate, location=location, lowTemp=lowTemp, highTemp=highTemp, currentTemp=currentTemp, validDate=validDate, validLocation=validLocation)
+                            
+                            
+                            #lowTemp=str(lowTemp), highTemp=str(highTemp), currentTemp=str(currentTemp))
     
     
 #Start the server here
