@@ -252,6 +252,7 @@ form select {
   -moz-appearance: none;
   appearance: none; }
 form textarea {
+  width: 60%;
   resize: vertical; }
 
 /*

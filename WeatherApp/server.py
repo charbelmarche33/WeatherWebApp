@@ -33,6 +33,7 @@ def mainIndex():
     todaysDate = now.strftime("%Y-%m-%d")
     conn = connectToDB()
     curr = conn.cursor()
+    todayicon = "static/images/icons/icon-umberella.png"
             
     if request.method == 'POST':
         try:
@@ -88,6 +89,38 @@ def mainIndex():
                             dailyData = weatherData['daily']['data'][0]
                             #This is an example of accessing a key.
                             print(dailyData['summary'])
+                            #Pairs a weather picture with the weather icon from DarkSky. (Haven't found a good placeholder before a search is made)
+                            wicon = dailyData['icon']
+                            print wicon
+                            
+                           
+                            
+                            if wicon == "clear-day":
+                                todayicon = "static/images/icons/icon-2.svg"
+                            if wicon == "clear-night":
+                                todayicon = ""
+                            if wicon == "rain":
+                                todayicon = "static/images/icons/icon-10.svg"
+                            if wicon == "sleet":
+                                todayicon = "static/images/icons/icon-10.svg"
+                            if wicon == "snow":
+                                todayicon = "static/images/icons/icon-14.svg"
+                            if wicon == "hail":
+                                todayicon =  "static/images/icons/icon-14.svg"
+                            if wicon == "wind":
+                                todayicon = "static/images/icons/icon-wind.png"
+                            if wicon == "fog":
+                                todayicon = "static/images/icons/icon-7.svg"
+                            if wicon == "cloudy":
+                                todayicon = "static/images/icons/icon-5.svg"
+                            if wicon == "partly-cloudy-day":
+                                todayicon = "static/images/icons/icon-6.svg"
+                            if wicon == "partly-cloudy-night":
+                                todayicon = ""
+                            if wicon == "thunderstorm":
+                                todayicon = "static/images/icons/icon-11.svg"
+                            if wicon == "tornado":
+                                todayicon = "static/images/icons/icon-8.svg"
                             
                             
                         except:
@@ -106,7 +139,7 @@ def mainIndex():
     except:
         print("Error selecting information from cities.")
     results = curr.fetchall();
-    return render_template('index.html', results=results, todaysDate=todaysDate, validDate=validDate, validLocation=validLocation)
+    return render_template('index.html', results=results, todayicon = todayicon, todaysDate=todaysDate, validDate=validDate, validLocation=validLocation)
     
     
 #Start the server here
