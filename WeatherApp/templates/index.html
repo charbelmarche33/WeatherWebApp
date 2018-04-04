@@ -103,21 +103,25 @@
 				<div class="forecast-container">
 					<div class="today forecast">
 						<div class="forecast-header">
-							<div class="day">Monday</div>
+							<div class="day">Wednesday</div>
 							<div class="date">{{todaysDate}}</div>
 						</div>
 						<!-- .forecast-header -->
 						<div class="forecast-content">
-							<div class="location">{{location}}</div>
+							<div class="location">{{getLocation}}</div>
 							<div class="degree">
-								<div class="num">{{currentTemp}}<sup>o</sup>F</div>
+								{%if currentTempBool == True%}
+									<div class="num">{{currentTemp}}<sup>o</sup>F</div>				
+								{% endif %}
+								{%if currentTempBool == ""%}
+									<div class="num">{{currentTemp}}</div>				
+								{% endif %}
 								<div class="forecast-icon">
 									<img src="static/images/icons/icon-1.svg" alt="" width=90>
 								</div>
 							</div>
-							<span><img src="static/images/icon-umberella.png" alt="">20%</span>
-							<span><img src="static/images/icon-wind.png" alt="">18km/h</span>
-							<span><img src="static/images/icon-compass.png" alt="">East</span>
+							<span><img src="static/images/icon-umberella.png" alt="">{{precip}}%</span>
+							<span><img src="static/images/icon-wind.png" alt="">{{wind}}mph</span>
 						</div>
 					</div>
 					<div class="forecast">

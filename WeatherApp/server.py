@@ -6,6 +6,8 @@ import datetime
 import sys  
 #Need for json.loads
 import json, ast
+#Need for getting rid of special characters in location output
+import re
 
 reload(sys)  
 sys.setdefaultencoding('utf8')
@@ -33,13 +35,14 @@ def mainIndex():
     todaysDate = now.strftime("%Y-%m-%d")
     conn = connectToDB()
     curr = conn.cursor()
-    lowTemp = {}
-    highTemp = {}
-    precip = {}
-    wind = {}
-    humidity = {}
-    currentTemp = {}
+    lowTemp = ""
+    highTemp = ""
+    precip = ""
+    wind = ""
+    humidity = ""
+    currentTemp = ""
     location = ""
+    currentTempBool = ""
     
     if request.method == 'POST':
         try:
@@ -47,7 +50,6 @@ def mainIndex():
                 #Grab what is in the location field
                 location = request.form['locationInput']
                 date = request.form['dateInput']
-                print('Date: ' + date)
                 if date == '':
                     #They entered an invalid date
                     print("Invalid date")
@@ -55,7 +57,6 @@ def mainIndex():
                 try:
                     #Try and see if you can get anything in the city, state_id format (most will be this), format the string by delimiting by ','
                     location = location.split(',')
-                    print type(location)
                     #If the location string had a comma in it
                     if (len(location) > 1):
                         #Then we should check and see if they formatted the input like King George, VA and remove the white space before 'VA'
@@ -85,40 +86,46 @@ def mainIndex():
                         longitude = latLong[1]
                         date = time.mktime(datetime.datetime.strptime(date, "%Y-%m-%d").timetuple())
                         validLocation = True
-                        try:
-                         #Allows you to access your JSON data easily within your code. Includes built in JSON decoder
-                            apiCall = "https://api.darksky.net/forecast/" + key + "/" + str(latitude) + "," + str(longitude) + "," + str(int(date)) + "?exclude=minutely,hourly,alerts,flags"
-                            #Request to access API
-                            response = requests.get(apiCall)
-                            #Creates python dictionary w/unicode from JSON weather information from API
-                            weatherData = response.json() 
+                        #if date equals todaysdate statement
+                        todaysDate = time.mktime(datetime.datetime.strptime(todaysDate, "%Y-%m-%d").timetuple())
+                        
+                        if date == todaysDate:
                             
-                            #Throw into an if loop for current day:
-                            #for next day use dailyData2 = weatherData['daily']['data'][1]
-                        #if date == todaysDate:
-                            #Daily data information
-                            dailyData = weatherData['daily']['data'][0]
-                            #Currently data information
-                            currentData = weatherData['currently']
-                            #Retrieving a current temperature
-                            currentTemp = currentData['temperature']
-                                
-                            lowTemp = dailyData['temperatureLow']                   #Degrees Farenheit
-                            highTemp = dailyData['temperatureHigh']                 #Degrees Farenheit
-                            #averageTemp = []
-                            precip = dailyData['precipProbability'] * 100           # percentage
-                            wind = dailyData['windSpeed']                           # miles/hour
-                            humidity = dailyData['humidity'] * 100                  # percentage
-                            
-                            print("Low Temperature: " + str(lowTemp))
-                            print("High Temperature: " + str(highTemp))
-                            print("Precipitation: " + str(precip) + "%")
-                            print("Wind Speed: " + str(wind) + " mph")
-                            print("Humidity: " + str(humidity) + "%")
-                            print("Current Temperature: " + str(currentTemp))
-                            
-                        except:
-                            print("Call to dictionary failed")
+                            try:
+                                #Allows you to access your JSON data easily within your code. Includes built in JSON decoder
+                                apiCall = "https://api.darksky.net/forecast/" + key + "/" + str(latitude) + "," + str(longitude) + "," + str(int(date)) + "?exclude=minutely,hourly,alerts,flags"
+                                #Request to access API
+                                response = requests.get(apiCall)
+                                #Creates python dictionary w/unicode from JSON weather information from API
+                                weatherData = response.json()
+                                #Set date equal to todays date and change format
+                                todaysDate = now.strftime("%Y-%m-%d")
+                                date = todaysDate
+                                #Daily data information
+                                dailyData = weatherData['daily']['data'][0]
+                                #Currently data information
+                                currentData = weatherData['currently']
+                                #Retrieving a current temperature
+                                currentTemp = currentData['temperature']
+                                        
+                                lowTemp = dailyData['temperatureLow']                   #Degrees Farenheit
+                                highTemp = dailyData['temperatureHigh']                 #Degrees Farenheit
+                                #averageTemp = []
+                                precip = dailyData['precipProbability'] * 100           # percentage
+                                wind = dailyData['windSpeed']                           # miles/hour
+                                humidity = dailyData['humidity'] * 100                  # percentage
+                                    
+                                    
+                                currentTempBool = bool(currentTemp)
+                                print("Low Temperature: " + str(lowTemp))
+                                print("High Temperature: " + str(highTemp))
+                                print("Precipitation: " + str(precip) + "%")
+                                print("Wind Speed: " + str(wind) + " mph")
+                                print("Humidity: " + str(humidity) + "%")
+                                print("Current Temperature: " + str(currentTemp))
+                                    
+                            except:
+                                print("Call to dictionary failed")
                     else:
                         #It was not a valid entry, please reenter, try and figure out how to do this message lol
                         print("This was not a valid input.")
@@ -133,7 +140,14 @@ def mainIndex():
     except:
         print("Error selecting information from cities.")
     results = curr.fetchall();
-    return render_template('index.html', results=results, todaysDate=todaysDate, location=location, lowTemp=lowTemp, highTemp=highTemp, currentTemp=currentTemp, validDate=validDate, validLocation=validLocation)
+    
+    #Return location as a string and replaces extra characters 
+    getLocation = ast.literal_eval(json.dumps(location))
+    getLocation = str(getLocation)
+    getLocation = getLocation.translate(None, '\'[!@#$]')
+    getLocation = getLocation.replace("",'')
+    
+    return render_template('index.html', results=results, todaysDate=todaysDate, getLocation=getLocation, lowTemp=lowTemp, highTemp=highTemp, currentTemp=currentTemp, precip=precip, wind=wind, humidity=humidity, currentTempBool=currentTempBool, validDate=validDate, validLocation=validLocation)
                             
                             
                             #lowTemp=str(lowTemp), highTemp=str(highTemp), currentTemp=str(currentTemp))
