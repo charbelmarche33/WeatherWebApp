@@ -52,6 +52,7 @@ def mainIndex():
     validLogInCredentials = True
     validDate = True
     validLocation = True
+    isZip = True
     
     now = datetime.datetime.now()
     todaysDate = now.strftime("%Y-%m-%d")
@@ -65,6 +66,8 @@ def mainIndex():
     currentTemp = ""
     location = ""
     currentTempBool = ""
+    date = ""
+    getLocation= ""
     todayicon = "static/images/icons/icon-umberella.png"
     if request.method == 'POST':
         print("Here in main in post")
@@ -148,62 +151,148 @@ def mainIndex():
                             longitude = latLong[1]
                             if (isZip):
                                 getLocation = latLong[2] + ', ' + latLong[3]
-                            
-                            #Gets the unix time
-                            unixDate = time.mktime(datetime.datetime.strptime(date, "%Y-%m-%d").timetuple())
+                            print(latLong)
+                            latitude = latLong[0]
+                            longitude = latLong[1]
+                            date = time.mktime(datetime.datetime.strptime(date, "%Y-%m-%d").timetuple())
                             validLocation = True
-                            try:
-                             #Allows you to access your JSON data easily within your code. Includes built in JSON decoder
-                                apiCall = "https://api.darksky.net/forecast/" + key + "/" + str(latitude) + "," + str(longitude) + "," + str(int(unixDate)) + "?exclude=currently,minutely,hourly,alerts,flags"
-                                #Request to access API
-                                response = requests.get(apiCall)
-                                #Creates python dictionary w/unicode from JSON weather information from API
-                                weatherData = response.json()
-                                #Retrieves data from daily weatherData dictionary and turns it into a list (why though??)
-                                dailyData = weatherData['daily']['data'][0]
-                                #Pairs a weather picture with the weather icon from DarkSky. (Haven't found a good placeholder before a search is made)
-                                wicon = dailyData['icon']
-                                print(wicon + ' is wicon')
-                                lowTemp = dailyData['temperatureLow']                   #Degrees Farenheit
-                                highTemp = dailyData['temperatureHigh']                 #Degrees Farenheit
-                                #averageTemp = []
-                                precip = dailyData['precipProbability'] * 100           # percentage
-                                wind = dailyData['windSpeed']                           # miles/hour
-                                humidity = dailyData['humidity'] * 100                  # percentage
-                                print("Low Temperature: " + str(lowTemp))
-                                print("High Temperature: " + str(highTemp))
-                                print("Precipitation: " + str(precip) + "%")
-                                print("Wind Speed: " + str(wind) + " mph")
-                                print("Humidity: " + str(humidity) + "%")
-                                
-                                if wicon == "clear-day":
-                                    todayicon = "static/images/icons/icon-2.svg"
-                                if wicon == "clear-night":
-                                    todayicon = ""
-                                if wicon == "rain":
-                                    todayicon = "static/images/icons/icon-10.svg"
-                                if wicon == "sleet":
-                                    todayicon = "static/images/icons/icon-10.svg"
-                                if wicon == "snow":
-                                    todayicon = "static/images/icons/icon-14.svg"
-                                if wicon == "hail":
-                                    todayicon =  "static/images/icons/icon-14.svg"
-                                if wicon == "wind":
-                                    todayicon = "static/images/icons/icon-wind.png"
-                                if wicon == "fog":
-                                    todayicon = "static/images/icons/icon-7.svg"
-                                if wicon == "cloudy":
-                                    todayicon = "static/images/icons/icon-5.svg"
-                                if wicon == "partly-cloudy-day":
-                                    todayicon = "static/images/icons/icon-6.svg"
-                                if wicon == "partly-cloudy-night":
-                                    todayicon = ""
-                                if wicon == "thunderstorm":
-                                    todayicon = "static/images/icons/icon-11.svg"
-                                if wicon == "tornado":
-                                    todayicon = "static/images/icons/icon-8.svg"
-                            except:
-                                print("Call to dictionary failed")
+                            #if date equals todaysdate statement
+                            #how to get u code back
+                            todaysDate = time.mktime(datetime.datetime.strptime(todaysDate, "%Y-%m-%d").timetuple())
+    
+                            #if within next ten days give current ]
+                            if date <= (todaysDate + (86400*7)):
+                                try:
+                                    #Allows you to access your JSON data easily within your code. Includes built in JSON decoder
+                                    apiCall = "https://api.darksky.net/forecast/" + key + "/" + str(latitude) + "," + str(longitude) + "," + str(int(date)) + "?exclude=minutely,hourly,alerts,flags"
+                                    #Request to access API
+                                    response = requests.get(apiCall)
+                                    #Creates python dictionary from JSON weather information from API
+                                    weatherData = response.json()
+                                    #Set date equal to todays date and change format
+                                    date = datetime.datetime.fromtimestamp(date)
+                                    date = date.date()
+                                    print(weatherData)
+                                    #Daily data information
+                                    dailyData = weatherData['daily']['data'][0]
+                                    #print(dailyData)
+                                    #Currently data information
+                                    currentData = weatherData['currently']
+                                    print "in the next 10 days6"
+                                    #Retrieving a current temperature
+                                    currentTemp = currentData['temperature']
+    
+                                    lowTemp = dailyData['temperatureLow']                   #Degrees Farenheit
+                                    highTemp = dailyData['temperatureHigh']                 #Degrees Farenheit
+                                    #averageTemp = []
+                                    print
+                                    precip = dailyData['precipProbability'] * 100           # percentage
+                                    wind = dailyData['windSpeed']                           # miles/hour
+                                    humidity = dailyData['humidity'] * 100                  # percentage
+                                    wicon = dailyData['icon']
+                                            
+                                    
+                                    currentTempBool = bool(currentTemp)
+                                    print("Low Temperature: " + str(lowTemp))
+                                    print("High Temperature: " + str(highTemp))
+                                    print("Precipitation: " + str(precip) + "%")
+                                    print("Wind Speed: " + str(wind) + " mph")
+                                    print("Humidity: " + str(humidity) + "%")
+                                    print("Current Temperature: " + str(currentTemp))
+                                                                    
+                                    if wicon == "clear-day":
+                                        todayicon = "static/images/icons/icon-2.svg"
+                                    if wicon == "clear-night":
+                                        todayicon = ""
+                                    if wicon == "rain":
+                                        todayicon = "static/images/icons/icon-10.svg"
+                                    if wicon == "sleet":
+                                        todayicon = "static/images/icons/icon-10.svg"
+                                    if wicon == "snow":
+                                        todayicon = "static/images/icons/icon-14.svg"
+                                    if wicon == "hail":
+                                        todayicon =  "static/images/icons/icon-14.svg"
+                                    if wicon == "wind":
+                                        todayicon = "static/images/icons/icon-wind.png"
+                                    if wicon == "fog":
+                                        todayicon = "static/images/icons/icon-7.svg"
+                                    if wicon == "cloudy":
+                                        todayicon = "static/images/icons/icon-5.svg"
+                                    if wicon == "partly-cloudy-day":
+                                        todayicon = "static/images/icons/icon-6.svg"
+                                    if wicon == "partly-cloudy-night":
+                                        todayicon = ""
+                                    if wicon == "thunderstorm":
+                                        todayicon = "static/images/icons/icon-11.svg"
+                                    if wicon == "tornado":
+                                        todayicon = "static/images/icons/icon-8.svg"
+                                    
+                                    #print date 
+                                    #for i in range(10): 
+                                        #date += datetime.timedelta(days=1) #(datetime.datetime.fromtimestamp(date) + datetime.timedelta(days=1))
+                                        #date = time.mktime(datetime.datetime.strptime(date, "%Y-%m-%d").timetuple())
+                                        #print(date) 
+                                except:
+                                    print("Call to api failed in next 7 days")
+                            else:
+                                try:
+                                    #Allows you to access your JSON data easily within your code. Includes built in JSON decoder
+                                    apiCall = "https://api.darksky.net/forecast/" + key + "/" + str(latitude) + "," + str(longitude) + "," + str(int(date)) + "?exclude=minutely,hourly,alerts,flags"
+                                    #Request to access API
+                                    response = requests.get(apiCall)
+                                    #Creates python dictionary from JSON weather information from API
+                                    weatherData = response.json()
+                                    #Set date equal to todays date and change format
+                                    date = datetime.datetime.fromtimestamp(date)
+                                    date = date.date()
+                                    print(weatherData)
+                                    #Daily data information
+                                    dailyData = weatherData['daily']['data'][0]
+                                    #print(dailyData)
+                                    #Currently data information
+                                    currentData = weatherData['currently']
+                                    print "in the next 10 days6"
+                                    #Retrieving a current temperature
+                                    currentTemp = currentData['temperature']
+    
+                                    lowTemp = dailyData['temperatureLow']                   #Degrees Farenheit
+                                    highTemp = dailyData['temperatureHigh']                 #Degrees Farenheit
+                                    wicon = dailyData['icon']
+                                            
+                                    
+                                    currentTempBool = bool(currentTemp)
+                                    print("Low Temperature: " + str(lowTemp))
+                                    print("High Temperature: " + str(highTemp))
+
+                                                                    
+                                    if wicon == "clear-day":
+                                        todayicon = "static/images/icons/icon-2.svg"
+                                    if wicon == "clear-night":
+                                        todayicon = ""
+                                    if wicon == "rain":
+                                        todayicon = "static/images/icons/icon-10.svg"
+                                    if wicon == "sleet":
+                                        todayicon = "static/images/icons/icon-10.svg"
+                                    if wicon == "snow":
+                                        todayicon = "static/images/icons/icon-14.svg"
+                                    if wicon == "hail":
+                                        todayicon =  "static/images/icons/icon-14.svg"
+                                    if wicon == "wind":
+                                        todayicon = "static/images/icons/icon-wind.png"
+                                    if wicon == "fog":
+                                        todayicon = "static/images/icons/icon-7.svg"
+                                    if wicon == "cloudy":
+                                        todayicon = "static/images/icons/icon-5.svg"
+                                    if wicon == "partly-cloudy-day":
+                                        todayicon = "static/images/icons/icon-6.svg"
+                                    if wicon == "partly-cloudy-night":
+                                        todayicon = ""
+                                    if wicon == "thunderstorm":
+                                        todayicon = "static/images/icons/icon-11.svg"
+                                    if wicon == "tornado":
+                                        todayicon = "static/images/icons/icon-8.svg"
+                                except:
+                                    print("Call to api failed in next 7 days")
                         else:
                             #It was not a valid entry, please reenter, try and figure out how to do this message lol
                             print("This was not a valid input.")
@@ -235,7 +324,19 @@ def mainIndex():
     except:
         print("Error selecting information from cities.")
     results = curr.fetchall()
-    return render_template('index.html', username=session['username'], validSignUpCredentials=validSignUpCredentials, validLogInCredentials=validLogInCredentials, results=results, todaysDate=todaysDate, lowTemp=lowTemp, highTemp=highTemp, precip=precip, wind=wind, humidity=humidity, validDate=validDate, validLocation=validLocation)
+    
+    #Return location as a string and replaces extra characters 
+    if (isZip == False):
+        getLocation = ast.literal_eval(json.dumps(location))
+        getLocation = str(getLocation)
+        getLocation = getLocation.translate(None, '\'[!@#$]')
+        getLocation = getLocation.replace("",'')
+    
+    return render_template('index.html', username=session['username'], validSignUpCredentials=validSignUpCredentials, 
+                                        validLogInCredentials=validLogInCredentials, results=results, todaysDate=todaysDate, 
+                                        lowTemp=lowTemp, highTemp=highTemp, precip=precip, currentTemp=currentTemp, wind=wind,
+                                        humidity=humidity, date=date, getLocation=getLocation,
+                                        validDate=validDate, validLocation=validLocation, currentTempBool=currentTempBool)
     
     
 #Start the server here

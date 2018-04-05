@@ -109,113 +109,38 @@
 
 			</div>
 		</div>
+		{%if getLocation != ""%}
 		<div class="forecast-table">
 			<div class="container">
 				<div class="forecast-container">
 					<div class="today forecast">
 						<div class="forecast-header">
-							<div class="day">Wednesday</div>
-							<div class="date">{{todaysDate}}</div>
+							<div class="day">Thursday</div>
+							<div class="date">{{date}}</div>
 						</div>
 						<!-- .forecast-header -->
 						<div class="forecast-content">
 							<div class="location">{{getLocation}}</div>
 							<div class="degree">
-								<!--{%if currentTempBool == True%}
+								{%if currentTempBool == True%}
 									<div class="num">{{currentTemp}}<sup>o</sup>F</div>				
 								{% endif %}
 								{%if currentTempBool == ""%}
-									<div class="num">{{currentTemp}}</div>				
-								{% endif %}-->
+									<div class="num">{{highTemp}}</div>				
+								{% endif %}
 								<div class="forecast-icon">
-									<img src={{todayicon}} alt="" width=90>
+									<img src="static/images/icons/icon-1.svg" alt="" width=90>
 								</div>
 							</div>
 							<span><img src="static/images/icon-umberella.png" alt="">{{precip}}%</span>
 							<span><img src="static/images/icon-wind.png" alt="">{{wind}}mph</span>
 						</div>
 					</div>
-					<div class="forecast">
-						<div class="forecast-header">
-							<div class="day">Tuesday</div>
-						</div>
-						<!-- .forecast-header -->
-						<div class="forecast-content">
-							<div class="forecast-icon">
-								<img src={{todayicon}} alt="" width=48>
-							</div>
-							<div class="degree">2<sup>o</sup>C</div>
-							<small>18<sup>o</sup></small>
-						</div>
-					</div>
-					<div class="forecast">
-						<div class="forecast-header">
-							<div class="day">Wednesday</div>
-						</div>
-						<!-- .forecast-header -->
-						<div class="forecast-content">
-							<div class="forecast-icon">
-								<img src={{todayicon}} alt="" width=48>
-							</div>
-							<div class="degree">23<sup>o</sup>C</div>
-							<small>18<sup>o</sup></small>
-						</div>
-					</div>
-					<div class="forecast">
-						<div class="forecast-header">
-							<div class="day">Thursday</div>
-						</div>
-						<!-- .forecast-header -->
-						<div class="forecast-content">
-							<div class="forecast-icon">
-								<img src={{todayicon}} alt="" width=48>
-							</div>
-							<div class="degree">23<sup>o</sup>C</div>
-							<small>18<sup>o</sup></small>
-						</div>
-					</div>
-					<div class="forecast">
-						<div class="forecast-header">
-							<div class="day">Friday</div>
-						</div>
-						<!-- .forecast-header -->
-						<div class="forecast-content">
-							<div class="forecast-icon">
-								<img src={{todayicon}} alt="" width=48>
-							</div>
-							<div class="degree">23<sup>o</sup>C</div>
-							<small>18<sup>o</sup></small>
-						</div>
-					</div>
-					<div class="forecast">
-						<div class="forecast-header">
-							<div class="day">Saturday</div>
-						</div>
-						<!-- .forecast-header -->
-						<div class="forecast-content">
-							<div class="forecast-icon">
-								<img src={{todayicon}} alt="" width=48>
-							</div>
-							<div class="degree">23<sup>o</sup>C</div>
-							<small>18<sup>o</sup></small>
-						</div>
-					</div>
-					<div class="forecast">
-						<div class="forecast-header">
-							<div class="day">Sunday</div>
-						</div>
-						<!-- .forecast-header -->
-						<div class="forecast-content">
-							<div class="forecast-icon">
-								<img src="static/images/icons/icon-11.svg" alt="" width=48>
-							</div>
-							<div class="degree">23<sup>o</sup>C</div>
-							<small>18<sup>o</sup></small>
-						</div>
-					</div>
+					
 				</div>
 			</div>
 		</div>
+		{%endif%}
 		<main class="main-content">
 			<div class="fullwidth-block">
 				<div class="container">
