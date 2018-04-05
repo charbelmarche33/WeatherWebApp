@@ -7,7 +7,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 
 	<title>Historical Weather-Easy Access</title>
-	
+
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
 	<!-- Loading third party fonts -->
@@ -40,11 +40,18 @@
 
 				<!-- Default snippet for navigation -->
 				<div class="main-navigation">
+					{%if username != ''%}
+					<p><b>Welcome: {{username}}!</b></p>
+					{%endif%}
 					<button type="button" class="menu-toggle"><i class="fa fa-bars"></i></button>
 					<ul class="menu">
+						{%if username == ''%}
 						<li class="menu-item current-menu-item"><a data-toggle="modal" data-target="#loginModal">Sign In</a></li>
-						<!--<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">Launch demo modal</button>-->
-						<li class="menu-item current-menu-item"><a href="/">Sign Up</a></li>
+						<li class="menu-item current-menu-item"><a data-toggle="modal" data-target="#signupModal">Sign Up</a></li>
+						{%endif%} {%if username != ''%}
+						<li class="menu-item current-menu-item"><a href="/signout">Sign Out</a></li>
+						<li class="menu-item current-menu-item"><a href="/">View Past Searches</a></li>
+						{%endif%}
 						<li class="menu-item current-menu-item"><a href="/">About</a></li>
 					</ul>
 					<!-- .menu -->
@@ -64,6 +71,10 @@
 				<h3 style="color:#cc0000;background-color:#1e202b;">Invalid Location: Please enter a location in either the "city, state" format or as a 5 letter zipcode.</h3>
 				{% endif %} {%if validDate == False%}
 				<h3 style="color:#cc0000;background-color:#1e202b;">Invalid Date: Please enter a future date in 'mm/dd/yyyy' format.</h3>
+				{% endif %} {%if validLogInCredentials == False%}
+				<h3 style="color:#cc0000;background-color:#1e202b;">Invalid Username or Password: Please enter a valid username and password.</h3>
+				{% endif %}{%if validSignUpCredentials == False%}
+				<h3 style="color:#cc0000;background-color:#1e202b;">Invalid Username: Please enter another username, that one is taken.</h3>
 				{% endif %}
 				<form method="post" action="/" class="find-location">
 					<table>
@@ -103,21 +114,25 @@
 				<div class="forecast-container">
 					<div class="today forecast">
 						<div class="forecast-header">
-							<div class="day">Monday</div>
-							<div class="date">6 Oct</div>
+							<div class="day">Wednesday</div>
+							<div class="date">{{todaysDate}}</div>
 						</div>
 						<!-- .forecast-header -->
 						<div class="forecast-content">
-							<div class="location">New York</div>
+							<div class="location">{{getLocation}}</div>
 							<div class="degree">
-								<div class="num">23<sup>o</sup>C</div>
+								<!--{%if currentTempBool == True%}
+									<div class="num">{{currentTemp}}<sup>o</sup>F</div>				
+								{% endif %}
+								{%if currentTempBool == ""%}
+									<div class="num">{{currentTemp}}</div>				
+								{% endif %}-->
 								<div class="forecast-icon">
 									<img src={{todayicon}} alt="" width=90>
 								</div>
 							</div>
-							<span><img src="static/images/icon-umberella.png" alt="">20%</span>
-							<span><img src="static/images/icon-wind.png" alt="">18km/h</span>
-							<span><img src="static/images/icon-compass.png" alt="">East</span>
+							<span><img src="static/images/icon-umberella.png" alt="">{{precip}}%</span>
+							<span><img src="static/images/icon-wind.png" alt="">{{wind}}mph</span>
 						</div>
 					</div>
 					<div class="forecast">
@@ -129,7 +144,7 @@
 							<div class="forecast-icon">
 								<img src={{todayicon}} alt="" width=48>
 							</div>
-							<div class="degree">23<sup>o</sup>C</div>
+							<div class="degree">2<sup>o</sup>C</div>
 							<small>18<sup>o</sup></small>
 						</div>
 					</div>
@@ -343,50 +358,104 @@
 		<!-- .site-footer -->
 	</div>
 
-		<!--Login model-->
+	<div id="signupModal" class="modal fade" style="">
+		<div class="modal-dialog" style="position:relative;top:137px;width:1000px;height:350px;">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 class="modal-title">Sign Up</h4>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				</div>
+				<div class="modal-body">
+					<form method="post" class="form col-md-12 center-block" action="/">
+						<div class="form-group">
+							<input type="text" class="form-control input-lg" name="newUsername" placeholder="Username">
+						</div>
+						<div class="form-group">
+							<input type="password" class="form-control input-lg" name="newPassword" placeholder="Password">
+						</div>
+						<div class="form-group">
+							<input type="submit" name="signup" value="Sign Up">
+						</div>
+					</form>
+				</div>
+				<div class="modal-footer">
+				</div>
+			</div>
+			<!-- /.modal-content -->
+		</div>
+		<!-- /.modal-dialog -->
+	</div>
+	<!-- /.modal -->
+	
+	<!--Login model-->
 	<div id="loginModal" class="modal fade" style="">
+		<div class="modal-dialog" style="position:relative;top:137px;width:1000px;height:350px;">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 class="modal-title">Login</h4>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				</div>
+				<div class="modal-body">
+					<form method="post" class="form col-md-12 center-block" action="/">
+						<div class="form-group">
+							<input type="text" class="form-control input-lg" name="username" placeholder="Username">
+						</div>
+						<div class="form-group">
+							<input type="password" class="form-control input-lg" name="password" placeholder="Password">
+						</div>
+						<div class="form-group">
+							<input type="submit" name="signin" value="Sign In">
+						</div>
+					</form>
+				</div>
+				<div class="modal-footer">
+				</div>
+			</div>
+			<!-- /.modal-content -->
+		</div>
+		<!-- /.modal-dialog -->
+	</div>
+	<!-- /.modal -->
 
-    <div class="modal-dialog" style="position: relative;  top: 137px;width:1000px;height:350px;">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h4 class="modal-title">Login</h4>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        </div>
-        <div class="modal-body">
-          <form method="post" class="form col-md-12 center-block" action="/">
-            <div class="form-group">
-              <input type="text" class="form-control input-lg" name="userName" placeholder="Username">
-            </div>
-            <div class="form-group">
-              <input type="password" class="form-control input-lg" name="pw" placeholder="Password">
-            </div>
-            <div class="form-group">
-              <button class="btn btn-primary btn-lg btn-block">Sign In</button>
-            </div>
-          </form>
-        </div>
-        <div class="modal-footer">
-          <form action="/">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        </div>
-      </div>
-      <!-- /.modal-content -->
-    </div>
-    <!-- /.modal-dialog -->
-  </div>
-  <!-- /.modal -->
+	<div id="signupModal" class="modal fade" style="">
+		<div class="modal-dialog" style="position:relative;top:137px;width:1000px;height:350px;">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 class="modal-title">Sign Up</h4>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				</div>
+				<div class="modal-body">
+					<form method="post" class="form col-md-12 center-block" action="/">
+						<div class="form-group">
+							<input type="text" class="form-control input-lg" name="newUsername" placeholder="Username">
+						</div>
+						<div class="form-group">
+							<input type="password" class="form-control input-lg" name="newPassword" placeholder="Password">
+						</div>
+						<div class="form-group">
+							<input type="submit" name="signup" value="Sign Up">
+						</div>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<form action="/">
+				</div>
+			</div>
+			<!-- /.modal-content -->
+		</div>
+		<!-- /.modal-dialog -->
+	</div>
+	<!-- /.modal -->
 
 	<!-- Bootstrap core JavaScript -->
-  	<script src="static/jquery/jquery.min.js"></script>
-  	<script src="static/bootstrap/js/bootstrap.bundle.min.js"></script>
+	<script src="static/jquery/jquery.min.js"></script>
+	<script src="static/bootstrap/js/bootstrap.bundle.min.js"></script>
 	<script src="static/js/jquery-1.11.1.min.js"></script>
 	<script src="static/js/plugins.js"></script>
 	<script src="static/js/app.js"></script>
 	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-	
-
 </body>
 
 </html>
