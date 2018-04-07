@@ -21,7 +21,7 @@ password = False
 key = "d9929daf1c0c94de0546002bbcf12c5c"
 
 def connectToDB():
-    connectionString = 'dbname=world user=weatherapp password=Password1 host=localhost'
+    connectionString = 'dbname=world user=weatherapp password=password1 host=localhost'
     try:
         return psycopg2.connect(connectionString)
     except:
@@ -54,6 +54,7 @@ def mainIndex():
     validLocation = True
     isZip = True
     
+    weekdayName = ""
     now = datetime.datetime.now()
     todaysDate = now.strftime("%Y-%m-%d")
     conn = connectToDB()
@@ -67,6 +68,7 @@ def mainIndex():
     location = ""
     currentTempBool = ""
     date = ""
+    unixDate = ""
     getLocation= ""
     todayicon = "static/images/icons/icon-umberella.png"
     if request.method == 'POST':
@@ -108,6 +110,10 @@ def mainIndex():
                     location = request.form['locationInput']
                     getLocation = location
                     date = request.form['dateInput']
+                    #Gets the name for the day of the week the user chooses
+                    weekdayNameUnix = time.mktime(datetime.datetime.strptime(date, "%Y-%m-%d").timetuple())
+                    w = datetime.datetime.fromtimestamp(weekdayNameUnix)
+                    weekdayName = w.strftime("%A")
                     if date == '':
                         #They entered an invalid date
                         print("Invalid date")
@@ -155,12 +161,13 @@ def mainIndex():
                             latitude = latLong[0]
                             longitude = latLong[1]
                             date = time.mktime(datetime.datetime.strptime(date, "%Y-%m-%d").timetuple())
+                            unixDate = date
                             validLocation = True
                             #if date equals todaysdate statement
                             #how to get u code back
                             todaysDate = time.mktime(datetime.datetime.strptime(todaysDate, "%Y-%m-%d").timetuple())
     
-                            #if within next ten days give current ]
+                            #if within next seven days give current 
                             if date <= (todaysDate + (86400*7)):
                                 try:
                                     #Allows you to access your JSON data easily within your code. Includes built in JSON decoder
@@ -172,10 +179,10 @@ def mainIndex():
                                     #Set date equal to todays date and change format
                                     date = datetime.datetime.fromtimestamp(date)
                                     date = date.date()
-                                    print(weatherData)
+                                    #print(weatherData)
                                     #Daily data information
                                     dailyData = weatherData['daily']['data'][0]
-                                    #print(dailyData)
+                                    print dailyData
                                     #Currently data information
                                     currentData = weatherData['currently']
                                     print "in the next 10 days6"
@@ -245,10 +252,10 @@ def mainIndex():
                                     #Set date equal to todays date and change format
                                     date = datetime.datetime.fromtimestamp(date)
                                     date = date.date()
-                                    print(weatherData)
+                                    #print(weatherData)
                                     #Daily data information
                                     dailyData = weatherData['daily']['data'][0]
-                                    #print(dailyData)
+                                    print dailyData
                                     #Currently data information
                                     currentData = weatherData['currently']
                                     print "in the next 10 days6"
@@ -331,12 +338,11 @@ def mainIndex():
         getLocation = str(getLocation)
         getLocation = getLocation.translate(None, '\'[!@#$]')
         getLocation = getLocation.replace("",'')
-    
     return render_template('index.html', username=session['username'], validSignUpCredentials=validSignUpCredentials, 
-                                        validLogInCredentials=validLogInCredentials, results=results, todaysDate=todaysDate, 
-                                        lowTemp=lowTemp, highTemp=highTemp, precip=precip, currentTemp=currentTemp, wind=wind,
-                                        humidity=humidity, date=date, getLocation=getLocation,
-                                        validDate=validDate, validLocation=validLocation, currentTempBool=currentTempBool)
+                                        validLogInCredentials=validLogInCredentials, results=results, date=date, unixDate = unixDate, 
+                                        todaysDate=todaysDate, weekdayName=weekdayName, lowTemp=lowTemp, highTemp=highTemp, precip=precip, currentTemp=currentTemp,
+                                        wind=wind,humidity=humidity, getLocation=getLocation,validDate=validDate, validLocation=validLocation, 
+                                        currentTempBool=currentTempBool)
     
     
 #Start the server here

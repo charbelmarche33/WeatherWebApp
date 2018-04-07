@@ -115,7 +115,7 @@
 				<div class="forecast-container">
 					<div class="today forecast">
 						<div class="forecast-header">
-							<div class="day">Thursday</div>
+							<div class="day">{{weekdayName}}</div>
 							<div class="date">{{date}}</div>
 						</div>
 						<!-- .forecast-header -->
@@ -132,8 +132,10 @@
 									<img src="static/images/icons/icon-1.svg" alt="" width=90>
 								</div>
 							</div>
-							<span><img src="static/images/icon-umberella.png" alt="">{{precip}}%</span>
-							<span><img src="static/images/icon-wind.png" alt="">{{wind}}mph</span>
+							{%if unixDate <= (todaysDate + (86400*7)) %}
+								<span><img src="static/images/icon-umberella.png" alt="">{{precip}}%</span>
+								<span><img src="static/images/icon-wind.png" alt="">{{wind}}mph</span>
+							{% endif %}	
 						</div>
 					</div>
 					
