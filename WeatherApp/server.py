@@ -70,7 +70,9 @@ def mainIndex():
     date = ""
     unixDate = ""
     getLocation= ""
+    wicon = ""
     todayicon = "static/images/icons/icon-umberella.png"
+    precipType = ""
     if request.method == 'POST':
         print("Here in main in post")
         try:
@@ -179,26 +181,19 @@ def mainIndex():
                                     #Set date equal to todays date and change format
                                     date = datetime.datetime.fromtimestamp(date)
                                     date = date.date()
-                                    #print(weatherData)
                                     #Daily data information
                                     dailyData = weatherData['daily']['data'][0]
-                                    print dailyData
                                     #Currently data information
                                     currentData = weatherData['currently']
-                                    print "in the next 10 days6"
-                                    #Retrieving a current temperature
                                     currentTemp = currentData['temperature']
     
                                     lowTemp = dailyData['temperatureLow']                   #Degrees Farenheit
                                     highTemp = dailyData['temperatureHigh']                 #Degrees Farenheit
-                                    #averageTemp = []
-                                    print
                                     precip = dailyData['precipProbability'] * 100           # percentage
                                     wind = dailyData['windSpeed']                           # miles/hour
                                     humidity = dailyData['humidity'] * 100                  # percentage
                                     wicon = dailyData['icon']
                                             
-                                    
                                     currentTempBool = bool(currentTemp)
                                     print("Low Temperature: " + str(lowTemp))
                                     print("High Temperature: " + str(highTemp))
@@ -233,12 +228,7 @@ def mainIndex():
                                         todayicon = "static/images/icons/icon-11.svg"
                                     if wicon == "tornado":
                                         todayicon = "static/images/icons/icon-8.svg"
-                                    
-                                    #print date 
-                                    #for i in range(10): 
-                                        #date += datetime.timedelta(days=1) #(datetime.datetime.fromtimestamp(date) + datetime.timedelta(days=1))
-                                        #date = time.mktime(datetime.datetime.strptime(date, "%Y-%m-%d").timetuple())
-                                        #print(date) 
+                                
                                 except:
                                     print("Call to api failed in next 7 days")
                             else:
@@ -265,12 +255,8 @@ def mainIndex():
                                     lowTemp = dailyData['temperatureLow']                   #Degrees Farenheit
                                     highTemp = dailyData['temperatureHigh']                 #Degrees Farenheit
                                     wicon = dailyData['icon']
-                                            
-                                    
+                                    precipType = dailyData['precipType']        
                                     currentTempBool = bool(currentTemp)
-                                    print("Low Temperature: " + str(lowTemp))
-                                    print("High Temperature: " + str(highTemp))
-
                                                                     
                                     if wicon == "clear-day":
                                         todayicon = "static/images/icons/icon-2.svg"
@@ -340,9 +326,9 @@ def mainIndex():
         getLocation = getLocation.replace("",'')
     return render_template('index.html', username=session['username'], validSignUpCredentials=validSignUpCredentials, 
                                         validLogInCredentials=validLogInCredentials, results=results, date=date, unixDate = unixDate, 
-                                        todaysDate=todaysDate, weekdayName=weekdayName, lowTemp=lowTemp, highTemp=highTemp, precip=precip, currentTemp=currentTemp,
-                                        wind=wind,humidity=humidity, getLocation=getLocation,validDate=validDate, validLocation=validLocation, 
-                                        currentTempBool=currentTempBool)
+                                        todaysDate=todaysDate, weekdayName=weekdayName, lowTemp=lowTemp, highTemp=highTemp, precip=precip, 
+                                        precipType=precipType, currentTemp=currentTemp, wind=wind, humidity=humidity, getLocation=getLocation, 
+                                        todayicon=todayicon, wicon=wicon, validDate=validDate, validLocation=validLocation, currentTempBool=currentTempBool)
     
     
 #Start the server here

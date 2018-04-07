@@ -129,13 +129,23 @@
 									<div class="num">{{highTemp}}</div>				
 								{% endif %}
 								<div class="forecast-icon">
-									<img src="static/images/icons/icon-1.svg" alt="" width=90>
+									{%if todayicon != "" and unixDate <= (todaysDate + (86400*7)) %}
+										<img src={{todayicon}} alt="" width=90>
+									{% endif %}	
 								</div>
 							</div>
 							{%if unixDate <= (todaysDate + (86400*7)) %}
 								<span><img src="static/images/icon-umberella.png" alt="">{{precip}}%</span>
 								<span><img src="static/images/icon-wind.png" alt="">{{wind}}mph</span>
+								<span>Humidity: {{humidity}}%</span>
+								<span>High: {{highTemp}}°F</span>
+								<span>Low: {{lowTemp}}°F</span>
+								<span>Weather Type: {{wicon}}</span>
 							{% endif %}	
+							{%if unixDate > (todaysDate + (86400*7)) %}
+								<span>High: {{highTemp}}°F</span>
+								<span>Low: {{lowTemp}}°F</span>
+							{% endif %}
 						</div>
 					</div>
 					
