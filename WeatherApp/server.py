@@ -8,6 +8,11 @@ import sys
 import json, ast
 #Need for getting rid of special characters in location output
 import re 
+import matplotlib
+matplotlib.use('Agg')
+import matplotlib.pyplot as plt # Do not do this prior to calling use()
+import numpy as np
+import Image
 
 reload(sys)  
 sys.setdefaultencoding('utf8')
@@ -33,7 +38,6 @@ def logout():
     #All that happens is the user is logged out and gets redirected to the main page.
     session['username'] = ''
     return redirect(url_for('mainIndex'))
-        
 
 @application.route('/', methods=['GET', 'POST'])
 def mainIndex(): 
@@ -54,7 +58,9 @@ def mainIndex():
     validLocation = True
     isZip = True
     
+    years = np.arange(0,10,5)
     weekdayName = ""
+    totalDates = ""
     now = datetime.datetime.now()
     todaysDate = now.strftime("%Y-%m-%d")
     conn = connectToDB()
@@ -73,6 +79,10 @@ def mainIndex():
     wicon = ""
     todayicon = "static/images/icons/icon-umberella.png"
     precipType = ""
+    average_temperature = 0
+    totalTime = ""
+    timestr = ""
+    
     if request.method == 'POST':
         print("Here in main in post")
         try:
@@ -85,6 +95,7 @@ def mainIndex():
                     password = request.form['newPassword']
                     print('Here')
                     try:
+                        
                         #See if these credentials match anything in the users table
                         print(curr.mogrify("SELECT * FROM users where username = %s;", (username, )))
                         curr.execute("SELECT * FROM users where username = %s;", (username, ))
@@ -151,6 +162,7 @@ def mainIndex():
                                 #It was not a valid entry, please reenter, try and figure out how to do this message lol
                                 print("This was not a valid zip cause wrong number of numbers, who taught you to count")
                                 validLocation = False
+                                
                         #If there is a result, then it was a valid entry
                         latLong = curr.fetchone()
                         if latLong:
@@ -168,7 +180,47 @@ def mainIndex():
                             #if date equals todaysdate statement
                             #how to get u code back
                             todaysDate = time.mktime(datetime.datetime.strptime(todaysDate, "%Y-%m-%d").timetuple())
-    
+                            # Returns average temperature for each half decade that the system has information about at the given location.
+                            #in totalDates it is getting different days for the date when subtracting years
+                            #goes from April 8 to 9 to 12 to 14. fix this
+                            c = 0
+                            count = 0
+                            oneYear = 31536000
+                            oneDay = 86400
+                            years = np.arange(0,15*oneYear,5*oneYear) #Play around with this 
+                            average_temperature = np.empty(years.size)
+                            totalDates = np.array([])
+                            newDate = date
+                            d = ""
+                            for y in years:
+                                newDate = newDate - y #Play around with this
+                                a = "https://api.darksky.net/forecast/" + key + "/" + str(latitude) + "," + str(longitude) + "," + str(int(newDate)) + "?exclude=minutely,hourly,alerts,flags"
+                                r = requests.get(a)
+                                data = r.json()
+                                current = data['currently']
+                                c = current['temperature']
+                                # Gets all the dates, converts to Y-m-d, and stores them in an array
+                                d = datetime.datetime.fromtimestamp(newDate)
+                                d = d.date()
+                                totalDates = np.append(totalDates, d)
+                                # Gets average temp at each year and stores value in an array
+                                average_temperature[count] = c
+                                count+=1
+                            len_average_temperature = np.arange(len(average_temperature))
+                            #Clears axis
+                            plt.cla()
+                            #Clears current figure
+                            plt.clf()
+                            #Plots bar graph for average temp for each half decade of given location
+                            plt.bar(len_average_temperature, average_temperature, align="center", alpha=0.5)
+                            plt.xticks(len_average_temperature, totalDates)
+                            plt.xlabel("Date (Y-M-D)", fontsize=10)
+                            plt.ylabel("Average Temperature in Farenheit", fontsize=10)
+                            plt.title("Average Temperature for Each Half Decade of Given Location", fontsize=12)
+                            #Creates an image file with the timestamp in the name so the image is always refreshed in window
+                            timestr = now.strftime("%Y%m%d-%H%M%S")
+                            plt.savefig('static/images/'+timestr+'.png')
+            
                             #if within next seven days give current 
                             if date <= (todaysDate + (86400*7)):
                                 try:
@@ -186,7 +238,6 @@ def mainIndex():
                                     #Currently data information
                                     currentData = weatherData['currently']
                                     currentTemp = currentData['temperature']
-    
                                     lowTemp = dailyData['temperatureLow']                   #Degrees Farenheit
                                     highTemp = dailyData['temperatureHigh']                 #Degrees Farenheit
                                     precip = dailyData['precipProbability'] * 100           # percentage
@@ -228,7 +279,9 @@ def mainIndex():
                                         todayicon = "static/images/icons/icon-11.svg"
                                     if wicon == "tornado":
                                         todayicon = "static/images/icons/icon-8.svg"
+                                    
                                 
+                                    
                                 except:
                                     print("Call to api failed in next 7 days")
                             else:
@@ -324,11 +377,13 @@ def mainIndex():
         getLocation = str(getLocation)
         getLocation = getLocation.translate(None, '\'[!@#$]')
         getLocation = getLocation.replace("",'')
+    
     return render_template('index.html', username=session['username'], validSignUpCredentials=validSignUpCredentials, 
                                         validLogInCredentials=validLogInCredentials, results=results, date=date, unixDate = unixDate, 
-                                        todaysDate=todaysDate, weekdayName=weekdayName, lowTemp=lowTemp, highTemp=highTemp, precip=precip, 
-                                        precipType=precipType, currentTemp=currentTemp, wind=wind, humidity=humidity, getLocation=getLocation, 
-                                        todayicon=todayicon, wicon=wicon, validDate=validDate, validLocation=validLocation, currentTempBool=currentTempBool)
+                                        todaysDate=todaysDate, weekdayName=weekdayName, average_temperature=average_temperature, lowTemp=lowTemp, 
+                                        highTemp=highTemp, precip=precip, precipType=precipType, currentTemp=currentTemp, wind=wind, humidity=humidity, 
+                                        getLocation=getLocation, todayicon=todayicon, wicon=wicon, validDate=validDate, validLocation=validLocation, 
+                                        currentTempBool=currentTempBool, timestr=timestr)
     
     
 #Start the server here

@@ -141,6 +141,7 @@
 								<span>High: {{highTemp}}°F</span>
 								<span>Low: {{lowTemp}}°F</span>
 								<span>Weather Type: {{wicon}}</span>
+								<span><img src="static/images/{{timestr}}.png" alt=""></span>
 							{% endif %}	
 							{%if unixDate > (todaysDate + (86400*7)) %}
 								<span>High: {{highTemp}}°F</span>
@@ -156,11 +157,11 @@
 		<main class="main-content">
 			<div class="fullwidth-block">
 				<div class="container">
-					<h2 class="section-title">Live cameras</h2>
+					<h2 class="section-title">Graphs</h2>
 					<div class="row">
 						<div class="col-md-3 col-sm-6">
 							<div class="live-camera">
-								<figure class="live-camera-cover"><img src="static/images/live-camera-1.jpg" alt=""></figure>
+								<figure class="live-camera-cover"><img src="static/images/{{timestr}}.png" alt=""></figure>
 								<h3 class="location">New York</h3>
 								<small class="date">8 oct, 8:00AM</small>
 							</div>
