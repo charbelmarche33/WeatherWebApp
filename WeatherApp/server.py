@@ -228,7 +228,7 @@ def mainIndex():
                             plt.xticks(len_average_temperature, totalDates)
                             plt.xlabel("Date (Y-M-D)", fontsize=10)
                             plt.ylabel("Average Temperature in Fahrenheit", fontsize=10)
-                            plt.title("Average Temperature for Each Half Decade of Given Location", fontsize=12)
+                            plt.title("Average Temperature for Each Half Decade of " + str(location[0]), fontsize=12)
                             #Creates an image file with the timestamp in the name so the image is always refreshed in window
                             timestr = now.strftime("%Y%m%d-%H%M%S")
                             plt.savefig('static/images/'+timestr+'.png')
