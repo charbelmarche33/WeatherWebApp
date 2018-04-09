@@ -80,7 +80,6 @@ def mainIndex():
     todayicon = "static/images/icons/icon-umberella.png"
     precipType = ""
     average_temperature = 0
-    totalTime = ""
     timestr = ""
     
     if request.method == 'POST':
@@ -180,9 +179,8 @@ def mainIndex():
                             #if date equals todaysdate statement
                             #how to get u code back
                             todaysDate = time.mktime(datetime.datetime.strptime(todaysDate, "%Y-%m-%d").timetuple())
+                            
                             # Returns average temperature for each half decade that the system has information about at the given location.
-                            #in totalDates it is getting different days for the date when subtracting years
-                            #goes from April 8 to 9 to 12 to 14. fix this
                             c = 0
                             count = 0
                             oneYear = 31536000
@@ -190,7 +188,10 @@ def mainIndex():
                             # Gets a range of years; Starts at 5 years, increments by 5 years and ends by 30 years
                             years = np.arange(5*oneYear,30*oneYear,5*oneYear+oneDay) 
                             average_temperature = np.empty(years.size)
+                            average_precip = np.empty(years.size)
                             totalDates = np.array([])
+                            totalDates2 = np.array([])
+                            
                             d = ""
                             for y in years:
                                 
@@ -203,7 +204,7 @@ def mainIndex():
                                 if newDate - y <= newDate - (15*oneYear):
                                     newDate = newDate - y - oneDay - oneDay
                                 else:
-                                    newDate = newDate - y - oneDay#Play around with this
+                                    newDate = newDate - y - oneDay
                                   
                             
                                 a = "https://api.darksky.net/forecast/" + key + "/" + str(latitude) + "," + str(longitude) + "," + str(int(newDate)) + "?exclude=minutely,hourly,alerts,flags"
@@ -228,11 +229,11 @@ def mainIndex():
                             plt.xticks(len_average_temperature, totalDates)
                             plt.xlabel("Date (Y-M-D)", fontsize=10)
                             plt.ylabel("Average Temperature in Fahrenheit", fontsize=10)
-                            plt.title("Average Temperature for Each Half Decade of " + str(location[0]), fontsize=12)
+                            plt.title("Average Temperature for Each Half Decade in " + str(location[0]) +", "+ str(location[1]), fontsize=12)
                             #Creates an image file with the timestamp in the name so the image is always refreshed in window
                             timestr = now.strftime("%Y%m%d-%H%M%S")
                             plt.savefig('static/images/'+timestr+'.png')
-            
+                            
                             #if within next seven days give current 
                             if date <= (todaysDate + (86400*7)):
                                 try:
@@ -252,18 +253,12 @@ def mainIndex():
                                     currentTemp = currentData['temperature']
                                     lowTemp = dailyData['temperatureLow']                   #Degrees Farenheit
                                     highTemp = dailyData['temperatureHigh']                 #Degrees Farenheit
-                                    precip = dailyData['precipProbability'] * 100           # percentage
+                                    precip = dailyData['precipProbablity'] * 100           # percentage
                                     wind = dailyData['windSpeed']                           # miles/hour
                                     humidity = dailyData['humidity'] * 100                  # percentage
                                     wicon = dailyData['icon']
                                             
                                     currentTempBool = bool(currentTemp)
-                                    print("Low Temperature: " + str(lowTemp))
-                                    print("High Temperature: " + str(highTemp))
-                                    print("Precipitation: " + str(precip) + "%")
-                                    print("Wind Speed: " + str(wind) + " mph")
-                                    print("Humidity: " + str(humidity) + "%")
-                                    print("Current Temperature: " + str(currentTemp))
                                                                     
                                     if wicon == "clear-day":
                                         todayicon = "static/images/icons/icon-2.svg"
