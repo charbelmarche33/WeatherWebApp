@@ -80,6 +80,7 @@ def mainIndex():
     todayicon = "static/images/icons/icon-umberella.png"
     precipType = ""
     average_temperature = 0
+    totalTime = ""
     timestr = ""
     
     if request.method == 'POST':
@@ -179,7 +180,6 @@ def mainIndex():
                             #if date equals todaysdate statement
                             #how to get u code back
                             todaysDate = time.mktime(datetime.datetime.strptime(todaysDate, "%Y-%m-%d").timetuple())
-                            
                             # Returns average temperature for each half decade that the system has information about at the given location.
                             c = 0
                             count = 0
@@ -188,11 +188,9 @@ def mainIndex():
                             # Gets a range of years; Starts at 5 years, increments by 5 years and ends by 30 years
                             years = np.arange(5*oneYear,30*oneYear,5*oneYear+oneDay) 
                             average_temperature = np.empty(years.size)
-                            average_precip = np.empty(years.size)
                             totalDates = np.array([])
-                            totalDates2 = np.array([])
-                            
                             d = ""
+                            
                             for y in years:
                                 
                                 # Loop that returns the correct date that corresponds with the 
@@ -233,7 +231,7 @@ def mainIndex():
                             #Creates an image file with the timestamp in the name so the image is always refreshed in window
                             timestr = now.strftime("%Y%m%d-%H%M%S")
                             plt.savefig('static/images/'+timestr+'.png')
-                            
+            
                             #if within next seven days give current 
                             if date <= (todaysDate + (86400*7)):
                                 try:
@@ -253,7 +251,7 @@ def mainIndex():
                                     currentTemp = currentData['temperature']
                                     lowTemp = dailyData['temperatureLow']                   #Degrees Farenheit
                                     highTemp = dailyData['temperatureHigh']                 #Degrees Farenheit
-                                    precip = dailyData['precipProbablity'] * 100           # percentage
+                                    precip = dailyData['precipProbability'] * 100           # percentage
                                     wind = dailyData['windSpeed']                           # miles/hour
                                     humidity = dailyData['humidity'] * 100                  # percentage
                                     wicon = dailyData['icon']
@@ -305,10 +303,8 @@ def mainIndex():
                                     #print(weatherData)
                                     #Daily data information
                                     dailyData = weatherData['daily']['data'][0]
-                                    print dailyData
                                     #Currently data information
                                     currentData = weatherData['currently']
-                                    print "in the next 10 days6"
                                     #Retrieving a current temperature
                                     currentTemp = currentData['temperature']
     
@@ -345,7 +341,7 @@ def mainIndex():
                                     if wicon == "tornado":
                                         todayicon = "static/images/icons/icon-8.svg"
                                 except:
-                                    print("Call to api failed in next 7 days")
+                                    print("Call to api failed in next 7 days.")
                         else:
                             #It was not a valid entry, please reenter, try and figure out how to do this message lol
                             print("This was not a valid input.")
