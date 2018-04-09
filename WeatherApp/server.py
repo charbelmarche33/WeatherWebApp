@@ -187,13 +187,25 @@ def mainIndex():
                             count = 0
                             oneYear = 31536000
                             oneDay = 86400
-                            years = np.arange(0,15*oneYear,5*oneYear) #Play around with this 
+                            # Gets a range of years; Starts at 5 years, increments by 5 years and ends by 30 years
+                            years = np.arange(5*oneYear,30*oneYear,5*oneYear+oneDay) 
                             average_temperature = np.empty(years.size)
                             totalDates = np.array([])
-                            newDate = date
                             d = ""
                             for y in years:
-                                newDate = newDate - y #Play around with this
+                                
+                                # Loop that returns the correct date that corresponds with the 
+                                # day the user chooses. There are 5 dates. All are 5 years apart.
+                                # The dates are in the past and have historical averages for temperature.
+                                # The dates begin 5 years before the users chosen date and continue to 
+                                # decrease every five years
+                                newDate = date
+                                if newDate - y <= newDate - (15*oneYear):
+                                    newDate = newDate - y - oneDay - oneDay
+                                else:
+                                    newDate = newDate - y - oneDay#Play around with this
+                                  
+                            
                                 a = "https://api.darksky.net/forecast/" + key + "/" + str(latitude) + "," + str(longitude) + "," + str(int(newDate)) + "?exclude=minutely,hourly,alerts,flags"
                                 r = requests.get(a)
                                 data = r.json()
@@ -215,7 +227,7 @@ def mainIndex():
                             plt.bar(len_average_temperature, average_temperature, align="center", alpha=0.5)
                             plt.xticks(len_average_temperature, totalDates)
                             plt.xlabel("Date (Y-M-D)", fontsize=10)
-                            plt.ylabel("Average Temperature in Farenheit", fontsize=10)
+                            plt.ylabel("Average Temperature in Fahrenheit", fontsize=10)
                             plt.title("Average Temperature for Each Half Decade of Given Location", fontsize=12)
                             #Creates an image file with the timestamp in the name so the image is always refreshed in window
                             timestr = now.strftime("%Y%m%d-%H%M%S")
