@@ -11,6 +11,10 @@ import re
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt # Do not do this prior to calling use()
+import matplotlib.pyplot as plt1
+import matplotlib.pyplot as plt2
+import matplotlib.pyplot as plt3
+import matplotlib.pyplot as plt4
 import numpy as np
 import Image
 
@@ -23,7 +27,7 @@ app.secret_key = os.urandom(24).encode('hex')
 application = app
 
 password = False
-key = "d9929daf1c0c94de0546002bbcf12c5c"
+key = "447f7d449acdbcbda631c51d6b696ebc"
 
 def connectToDB():
     connectionString = 'dbname=world user=weatherapp password=password1 host=localhost'
@@ -61,6 +65,10 @@ def mainIndex():
     years = np.arange(0,10,5)
     weekdayName = ""
     totalDates = ""
+    totalDates1 = ""
+    totalDates2 = ""
+    totalDates3 = ""
+    totalDates4 = ""
     now = datetime.datetime.now()
     todaysDate = now.strftime("%Y-%m-%d")
     conn = connectToDB()
@@ -80,9 +88,20 @@ def mainIndex():
     todayicon = "static/images/icons/icon-umberella.png"
     precipType = ""
     average_temperature = 0
+    average_temperature1 = 0
+    average_temperature2 = 0
+    average_temperature3 = 0
+    average_temperature4 = 0
     totalTime = ""
     timestr = ""
-    
+    timestr1 = ""
+    timestr2 = ""
+    timestr3 = ""
+    timestr4 = ""
+    plotFred= True
+    plotCharlottesville = True
+    plotHonolulu = True
+    plotRichmond = True
     if request.method == 'POST':
         print("Here in main in post")
         try:
@@ -183,14 +202,214 @@ def mainIndex():
                             # Returns average temperature for each half decade that the system has information about at the given location.
                             c = 0
                             count = 0
+                            count1 = 0
+                            count2 = 0
+                            count3 = 0
+                            count4 = 0
                             oneYear = 31536000
                             oneDay = 86400
                             # Gets a range of years; Starts at 5 years, increments by 5 years and ends by 30 years
-                            years = np.arange(5*oneYear,30*oneYear,5*oneYear+oneDay) 
+                            years = np.arange(5*oneYear,30*oneYear,5*oneYear+oneDay)
+                            years1 = np.arange(5*oneYear,30*oneYear,5*oneYear+oneDay)
+                            years2 = np.arange(5*oneYear,30*oneYear,5*oneYear+oneDay)
+                            years3 = np.arange(5*oneYear,30*oneYear,5*oneYear+oneDay)
+                            years4 = np.arange(5*oneYear,30*oneYear,5*oneYear+oneDay)
                             average_temperature = np.empty(years.size)
+                            average_temperature1 = np.empty(years1.size)
+                            average_temperature2 = np.empty(years2.size)
+                            average_temperature3 = np.empty(years3.size)
+                            average_temperature4 = np.empty(years4.size)
                             totalDates = np.array([])
+                            totalDates1 = np.array([])
+                            totalDates2 = np.array([])
+                            totalDates3 = np.array([])
+                            totalDates4 = np.array([])
                             d = ""
                             
+                            #Fredericksburg, VA
+                            while plotFred:
+                                latitude1 = 38.30318370
+                                longitude1 = -77.46053990
+                                print "this worked 0"
+                                for i in years1:
+                                
+                                    # Loop that returns the correct date that corresponds with the 
+                                    # day the user chooses. There are 5 dates. All are 5 years apart.
+                                    # The dates are in the past and have historical averages for temperature.
+                                    # The dates begin 5 years before the users chosen date and continue to 
+                                    # decrease every five years
+                                    newDate1 = date
+                                    if newDate1 - i <= newDate1 - (15*oneYear):
+                                        newDate1 = newDate1 - i - oneDay - oneDay
+                                    else:
+                                        newDate1 = newDate1 - i - oneDay
+                                      
+                                
+                                    a1 = "https://api.darksky.net/forecast/" + key + "/" + str(latitude1) + "," + str(longitude1) + "," + str(int(newDate1)) + "?exclude=minutely,hourly,alerts,flags"
+                                    r1 = requests.get(a1)
+                                    data1 = r1.json()
+                                    current1 = data1['currently']
+                                    c1 = current1['temperature']
+                                    # Gets all the dates, converts to Y-m-d, and stores them in an array
+                                    d1 = datetime.datetime.fromtimestamp(newDate1)
+                                    d1 = d1.date()
+                                    totalDates1 = np.append(totalDates1, d1)
+                                    # Gets average temp at each year and stores value in an array
+                                    average_temperature1[count1] = c1
+                                    count1+=1
+                                len_average_temperature1 = np.arange(len(average_temperature1))
+                                plt1.cla()   # Clear axis
+                                plt1.clf()   # Clear figure
+                                #Plots bar graph for average temp for each half decade of given location
+                                plt1.bar(len_average_temperature1, average_temperature1, align="center", alpha=0.5)
+                                plt1.xticks(len_average_temperature1, totalDates1)
+                                plt1.xlabel("Date (Y-M-D)", fontsize=10)
+                                plt1.ylabel("Average Temperature in Fahrenheit", fontsize=10)
+                                plt1.title("Average Temperature for Each Half Decade in Fredericksburg, VA", fontsize=12)
+                                #Creates an image file with the timestamp in the name so the image is always refreshed in window
+                                timestr1 = now.strftime("%Y%m%d-%H%M%S")
+                                plt1.savefig('static/images/'+timestr1+"moretime"'.png')
+                                plotFred = False
+                                
+                            # Charlottesville, VA    
+                            while plotCharlottesville:
+                                latitude2 = 38.02930590
+                                longitude2 = -78.47667810
+                                print "this worked 0"
+                                for k in years2:
+                                
+                                    # Loop that returns the correct date that corresponds with the 
+                                    # day the user chooses. There are 5 dates. All are 5 years apart.
+                                    # The dates are in the past and have historical averages for temperature.
+                                    # The dates begin 5 years before the users chosen date and continue to 
+                                    # decrease every five years
+                                    newDate2 = date
+                                    if newDate2 - k <= newDate2 - (15*oneYear):
+                                        newDate2 = newDate2 - k - oneDay - oneDay
+                                    else:
+                                        newDate2 = newDate2 - k - oneDay
+                                      
+                                
+                                    a2 = "https://api.darksky.net/forecast/" + key + "/" + str(latitude2) + "," + str(longitude2) + "," + str(int(newDate2)) + "?exclude=minutely,hourly,alerts,flags"
+                                    r2 = requests.get(a2)
+                                    data2 = r2.json()
+                                    current2 = data2['currently']
+                                    c2 = current2['temperature']
+                                    # Gets all the dates, converts to Y-m-d, and stores them in an array
+                                    d2 = datetime.datetime.fromtimestamp(newDate2)
+                                    d2 = d2.date()
+                                    totalDates2 = np.append(totalDates2, d2)
+                                    # Gets average temp at each year and stores value in an array
+                                    average_temperature2[count2] = c2
+                                    count2+=1
+                                len_average_temperature2 = np.arange(len(average_temperature2))
+                                plt2.cla()   # Clear axis
+                                plt2.clf()   # Clear figure
+                                #Plots bar graph for average temp for each half decade of given location
+                                plt2.bar(len_average_temperature2, average_temperature2, align="center", alpha=0.5)
+                                plt2.xticks(len_average_temperature2, totalDates2)
+                                plt2.xlabel("Date (Y-M-D)", fontsize=10)
+                                plt2.ylabel("Average Temperature in Fahrenheit", fontsize=10)
+                                plt2.title("Average Temperature for Each Half Decade in Charlottesville, VA", fontsize=12)
+                                #Creates an image file with the timestamp in the name so the image is always refreshed in window
+                                timestr2 = now.strftime("%Y%m%d-%H%M%S")
+                                plt2.savefig('static/images/'+timestr2+"moretime2"'.png')
+                                plotCharlottesville = False
+                                
+                                
+                            # Honolulu, HI   
+                            while plotHonolulu:
+                                latitude3 = 21.30694440
+                                longitude3 = -157.85833330
+                                print "this worked 0"
+                                for h in years3:
+                                
+                                    # Loop that returns the correct date that corresponds with the 
+                                    # day the user chooses. There are 5 dates. All are 5 years apart.
+                                    # The dates are in the past and have historical averages for temperature.
+                                    # The dates begin 5 years before the users chosen date and continue to 
+                                    # decrease every five years
+                                    newDate3 = date
+                                    if newDate3 - h <= newDate3 - (15*oneYear):
+                                        newDate3 = newDate3 - h - oneDay - oneDay
+                                    else:
+                                        newDate3 = newDate3 - h - oneDay
+                                      
+                                
+                                    a3 = "https://api.darksky.net/forecast/" + key + "/" + str(latitude3) + "," + str(longitude3) + "," + str(int(newDate3)) + "?exclude=minutely,hourly,alerts,flags"
+                                    r3 = requests.get(a3)
+                                    data3 = r3.json()
+                                    current3 = data3['currently']
+                                    c3 = current3['temperature']
+                                    # Gets all the dates, converts to Y-m-d, and stores them in an array
+                                    d3 = datetime.datetime.fromtimestamp(newDate3)
+                                    d3 = d3.date()
+                                    totalDates3 = np.append(totalDates3, d3)
+                                    # Gets average temp at each year and stores value in an array
+                                    average_temperature3[count3] = c3
+                                    count3+=1
+                                len_average_temperature3 = np.arange(len(average_temperature3))
+                                plt3.cla()   # Clear axis
+                                plt3.clf()   # Clear figure
+                                #Plots bar graph for average temp for each half decade of given location
+                                plt3.bar(len_average_temperature3, average_temperature3, align="center", alpha=0.5)
+                                plt3.xticks(len_average_temperature3, totalDates3)
+                                plt3.xlabel("Date (Y-M-D)", fontsize=10)
+                                plt3.ylabel("Average Temperature in Fahrenheit", fontsize=10)
+                                plt3.title("Average Temperature for Each Half Decade in Charlottesville, VA", fontsize=12)
+                                #Creates an image file with the timestamp in the name so the image is always refreshed in window
+                                timestr3 = now.strftime("%Y%m%d-%H%M%S")
+                                plt3.savefig('static/images/'+timestr3+"moretime3"'.png')
+                                plotHonolulu = False
+                            
+                            # Richmond, VA
+                            while plotRichmond:
+                                latitude4 = 37.55375750
+                                longitude4 = -77.46026170
+                                print "this worked 0"
+                                for j in years4:
+                                
+                                    # Loop that returns the correct date that corresponds with the 
+                                    # day the user chooses. There are 5 dates. All are 5 years apart.
+                                    # The dates are in the past and have historical averages for temperature.
+                                    # The dates begin 5 years before the users chosen date and continue to 
+                                    # decrease every five years
+                                    newDate4 = date
+                                    if newDate4 - j <= newDate4 - (15*oneYear):
+                                        newDate4 = newDate4 - j - oneDay - oneDay
+                                    else:
+                                        newDate4 = newDate4 - j - oneDay
+                                      
+                                
+                                    a4 = "https://api.darksky.net/forecast/" + key + "/" + str(latitude4) + "," + str(longitude4) + "," + str(int(newDate4)) + "?exclude=minutely,hourly,alerts,flags"
+                                    r4 = requests.get(a4)
+                                    data4 = r4.json()
+                                    current4 = data4['currently']
+                                    c4 = current4['temperature']
+                                    # Gets all the dates, converts to Y-m-d, and stores them in an array
+                                    d4 = datetime.datetime.fromtimestamp(newDate4)
+                                    d4 = d4.date()
+                                    totalDates4 = np.append(totalDates4, d4)
+                                    # Gets average temp at each year and stores value in an array
+                                    average_temperature4[count4] = c4
+                                    count4+=1
+                                len_average_temperature4 = np.arange(len(average_temperature4))
+                                plt4.cla()   # Clear axis
+                                plt4.clf()   # Clear figure
+                                #Plots bar graph for average temp for each half decade of given location
+                                plt4.bar(len_average_temperature4, average_temperature4, align="center", alpha=0.5)
+                                plt4.xticks(len_average_temperature4, totalDates4)
+                                plt4.xlabel("Date (Y-M-D)", fontsize=10)
+                                plt4.ylabel("Average Temperature in Fahrenheit", fontsize=10)
+                                plt4.title("Average Temperature for Each Half Decade in Charlottesville, VA", fontsize=12)
+                                #Creates an image file with the timestamp in the name so the image is always refreshed in window
+                                timestr4 = now.strftime("%Y%m%d-%H%M%S")
+                                plt4.savefig('static/images/'+timestr4+"moretime4"'.png')
+                                plotRichmond = False
+                                
+                                
+                            print "this worked 1"
+                            # Location user chooses
                             for y in years:
                                 
                                 # Loop that returns the correct date that corresponds with the 
@@ -218,10 +437,8 @@ def mainIndex():
                                 average_temperature[count] = c
                                 count+=1
                             len_average_temperature = np.arange(len(average_temperature))
-                            #Clears axis
-                            plt.cla()
-                            #Clears current figure
-                            plt.clf()
+                            plt.cla()   # Clear axis
+                            plt.clf()   # Clear figure
                             #Plots bar graph for average temp for each half decade of given location
                             plt.bar(len_average_temperature, average_temperature, align="center", alpha=0.5)
                             plt.xticks(len_average_temperature, totalDates)
@@ -231,19 +448,22 @@ def mainIndex():
                             #Creates an image file with the timestamp in the name so the image is always refreshed in window
                             timestr = now.strftime("%Y%m%d-%H%M%S")
                             plt.savefig('static/images/'+timestr+'.png')
-            
+                            print "this worked 2"
                             #if within next seven days give current 
                             if date <= (todaysDate + (86400*7)):
                                 try:
+                                    print "this worked 3"
                                     #Allows you to access your JSON data easily within your code. Includes built in JSON decoder
                                     apiCall = "https://api.darksky.net/forecast/" + key + "/" + str(latitude) + "," + str(longitude) + "," + str(int(date)) + "?exclude=minutely,hourly,alerts,flags"
                                     #Request to access API
+                                    print "this worked 4"
                                     response = requests.get(apiCall)
                                     #Creates python dictionary from JSON weather information from API
                                     weatherData = response.json()
                                     #Set date equal to todays date and change format
                                     date = datetime.datetime.fromtimestamp(date)
                                     date = date.date()
+                                    print "this worked 5"
                                     #Daily data information
                                     dailyData = weatherData['daily']['data'][0]
                                     #Currently data information
@@ -386,7 +606,7 @@ def mainIndex():
                                         todaysDate=todaysDate, weekdayName=weekdayName, average_temperature=average_temperature, lowTemp=lowTemp, 
                                         highTemp=highTemp, precip=precip, precipType=precipType, currentTemp=currentTemp, wind=wind, humidity=humidity, 
                                         getLocation=getLocation, todayicon=todayicon, wicon=wicon, validDate=validDate, validLocation=validLocation, 
-                                        currentTempBool=currentTempBool, timestr=timestr)
+                                        currentTempBool=currentTempBool, timestr=timestr, timestr1=timestr1, timestr2=timestr2, timestr3=timestr3, timestr4=timestr4)
     
     
 #Start the server here
