@@ -134,23 +134,41 @@
 									{% endif %}	
 								</div>
 							</div>
+
 							{%if unixDate <= (todaysDate + (86400*7)) %}
-								<span><img src="static/images/icon-umberella.png" alt="">{{precip}}%</span>
-								<span><img src="static/images/icon-wind.png" alt="">{{wind}}mph</span>
-								<span>Humidity: {{humidity}}%</span>
-								<span>High: {{highTemp}}°F</span>
-								<span>Low: {{lowTemp}}°F</span>
-								<span>Weather Type: {{wicon}}</span>
-								<span><img src="static/images/{{timestr}}.png" alt=""></span>
+								<p align="right">
+								<span><img src="static/images/icon-umberella@2x.png" alt=""><font size="6">{{precip}}%</font></span>
+								</p>
+								<p align="right">
+								<span><img src="static/images/icon-wind@2x.png" alt=""><font size="6">{{wind}}mph</font></span>
+								</p>
+								<p align="right">
+								<span><font size="6">Humidity: {{humidity}}%</font></span>
+								</p>
+								<p align="right">
+								<span><font size="6">High: {{highTemp}}°F</font></span>
+								</p>
+								<p align="right">
+								<span><font size="6">Low: {{lowTemp}}°F</font></span>
+								</p>
+								<p align="right">
+								<span><font size="6">Weather Type: {{wicon}}</font></span>
+								</p>
+								<span><center><img src="static/images/{{timestr}}.png" alt=""></center></span>
+								
 							{% endif %}	
 							{%if unixDate > (todaysDate + (86400*7)) %}
-								<span>High: {{highTemp}}°F</span>
-								<span>Low: {{lowTemp}}°F</span>
+								<p align="right">
+								<span><font size="6">High: {{highTemp}}°F</font></span>
+								</p>
+								<p align="right">
+								<span><font size="6">Low: {{lowTemp}}°F</font></span>
+								</p>
 								<span></span>
 								<span></span>
 								<span></span>
 								<span></span>
-								<span><img src="static/images/{{timestr}}.png" alt=""></span>
+								<span><center><img src="static/images/{{timestr}}.png" alt=""></center></span>
 							{% endif %}
 						</div>
 					</div>
