@@ -101,7 +101,7 @@
 								</div>
 							</td>
 							<td>
-								<input type="submit" name="weatherSearch" value="Search For Weather Data!">
+								<input type="submit" name="weatherSearch" value="Search Weather Data!">
 							</td>
 						</tr>
 					</table>
@@ -109,7 +109,7 @@
 
 			</div>
 		</div>
-		{%if getLocation != ""%}
+		{%if getLocation != "" and validDate%}
 		<div class="forecast-table">
 			<div class="container">
 				<div class="forecast-container">
@@ -129,13 +129,13 @@
 									<div class="num">{{highTemp}}</div>				
 								{% endif %}
 								<div class="forecast-icon">
-									{%if todayicon != "" and unixDate <= (todaysDate + (86400*7)) %}
+									{%if todayicon != "" and unixDate <= (TodaysDate + (86400*7)) %}
 										<img src={{todayicon}} alt="" width=90>
 									{% endif %}	
 								</div>
 							</div>
 
-							{%if unixDate <= (todaysDate + (86400*7)) %}
+							{%if unixDate <= (TodaysDate + (86400*7)) %}
 								<p align="right">
 								<span><img src="static/images/icon-umberella@2x.png" alt=""><font size="6">{{precip}}%</font></span>
 								</p>
@@ -157,7 +157,7 @@
 								<span><center><img src="static/images/{{timestr}}.png" alt=""></center></span>
 								
 							{% endif %}	
-							{%if unixDate > (todaysDate + (86400*7)) %}
+							{%if unixDate > (TodaysDate + (86400*7)) %}
 								<p align="right">
 								<span><font size="6">High: {{highTemp}}°F</font></span>
 								</p>

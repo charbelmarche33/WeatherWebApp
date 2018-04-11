@@ -27,17 +27,21 @@ _____________________________________________________________________
 
 Logging in:
 ________________________________________
-- psql -U postgres -h localhost
-- ******PASSWORD IS "Password1"*******
+- sudo service postgresql restart
+- psql -h localhost -d world -U weatherapp
+- ******PASSWORD IS "password1"*******
 
-sudo service postgresql restart
-psql -U weatherapp -h localhost world
-Password1
+
+password1
 \i cities.sql
 
+Git Push:
+git add *
+git commit -m ""
+git push https://github.com/charbelmarche33/WeatherWebApp
 
-
-
+If you are on Debian/Ubuntu, you can get all the dependencies required to build Matplotlib with:
+sudo apt-get build-dep python-matplotlib
 
 
 
