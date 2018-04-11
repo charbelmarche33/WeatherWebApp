@@ -82,7 +82,7 @@
 						<tr>
 							<td>
 								<!--<input type="text" size="50" placeholder="Enter a city and state, or a zipcode..."/>-->
-								<input type="text" size="50" placeholder="Enter a city and state, or a zipcode..." name="locationInput" list="locations" />
+								<input type="text" size="50" placeholder="Enter a city and state, or a zipcode..." name="locationInput" list="locations" required />
 								<datalist id="locations">
 									    {% for res in results %}
 										<option value="{{res[0]}}, {{res[1]}}">
@@ -97,7 +97,7 @@
 							</td>
 							<td>
 								<div>
-									<input type="date" name="dateInput" min="{{todaysDate}}" value="{{todaysDate}}" size="50" style="width: 200%;padding: 20px 50px 20px 20px;background: #1e202b;color: white;" />
+									<input type="date" name="dateInput" min="{{todaysDate}}" value="{{todaysDate}}" size="50" style="width: 200%;padding: 20px 50px 20px 20px;background: #1e202b;color: white;" required/>
 								</div>
 							</td>
 							<td>
