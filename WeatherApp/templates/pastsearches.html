@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<title>Historical Weather-Easy Access</title>
+
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+	<!-- Loading third party fonts -->
+	<link href="http://fonts.googleapis.com/css?family=Roboto:300,400,700|" rel="stylesheet" type="text/css">
+	<link href="static/fonts/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+	<!-- Loading main css file -->
+	<link rel="stylesheet" href="static/css/style.css">
+	<style>
+		table {
+		    font-family: arial, sans-serif;
+		    border-collapse: collapse;
+		    border: 1px solid black;
+		    width: 50%;
+		}
+		
+		td, th {
+		    border: 1px solid #dddddd;
+		    text-align: left;
+		    padding: 8px;
+		}
+		
+		tr:nth-child(even) {
+		    background-color: #1e202b;
+		}
+	</style>
+
+	<!--[if lt IE 9]>
+		<script src="js/ie-support/html5.js"></script>
+		<script src="js/ie-support/respond.js"></script>
+		<![endif]-->
+
+</head>
+
+
+<body>
+
+	<div class="site-content">
+		<div class="site-header">
+			<div class="container">
+				<a href="/" class="branding">
+						<img src="static/images/logo.png" alt="" class="logo">
+						<div class="logo-type">
+							<h1 class="site-title">Historical Weather</h1>
+							<small class="site-description">Let us help you plan your events</small>
+						</div>
+					</a>
+
+				<!-- Default snippet for navigation -->
+				<div class="main-navigation">
+					{%if username != ''%}
+					<p><b>Welcome: {{username}}!</b></p>
+					{%endif%}
+					<button type="button" class="menu-toggle"><i class="fa fa-bars"></i></button>
+					<ul class="menu">
+						{%if username == ''%}
+						<li class="menu-item current-menu-item"><a data-toggle="modal" data-target="#loginModal">Sign In</a></li>
+						<li class="menu-item current-menu-item"><a data-toggle="modal" data-target="#signupModal">Sign Up</a></li>
+						{%endif%} {%if username != ''%}
+						<li class="menu-item current-menu-item"><a href="/signout">Sign Out</a></li>
+						<li class="menu-item current-menu-item"><a href="/pastsearches">View Past Searches</a></li>
+						{%endif%}
+						<li class="menu-item current-menu-item"><a href="/">About</a></li>
+					</ul>
+					<!-- .menu -->
+				</div>
+				<!-- .main-navigation -->
+
+				<div class="mobile-navigation"></div>
+
+			</div>
+		</div>
+		<!-- .site-header -->
+		
+		<main class="main-content">
+			<table style="margin: 10px auto; size=30%">
+				<h2 style="margin-left: 25%"><b>Past searches:</b></h2>
+				<tr>
+				    <th><h4><b>Location</b></h4></th>
+				    <th><h4><b>Date</b></h4></th>
+			  	</tr>
+				{% for res in results %}
+			    <tr>
+				    <td><h4>{{res[1]}}</h4></td>
+				    <td><h4>{{res[2]}}</h4></td>
+			  	</tr>
+			  	{%endfor%}
+			</table> 
+		</main>
+		<!-- .main-content -->
+
+		<footer class="site-footer">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-8">
+						<form action="#" class="subscribe-form">
+							<input type="text" placeholder="Enter your email to subscribe...">
+							<input type="submit" value="Subscribe">
+						</form>
+					</div>
+					<div class="col-md-3 col-md-offset-1">
+						<div class="social-links">
+							<a href="#"><i class="fa fa-facebook"></i></a>
+							<a href="#"><i class="fa fa-twitter"></i></a>
+							<a href="#"><i class="fa fa-google-plus"></i></a>
+							<a href="#"><i class="fa fa-pinterest"></i></a>
+						</div>
+					</div>
+				</div>
+
+				<p class="colophon">Copyright 2018. University of Mary Washington Computer Science 430. Designed by Charbel Marche, Rachel Mooney, and Dylon Garrett.</p>
+			</div>
+		</footer>
+		<!-- .site-footer -->
+	</div>
+
+	<div id="signupModal" class="modal fade" style="">
+		<div class="modal-dialog" style="position:relative;top:137px;width:1000px;height:350px;">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 class="modal-title">Sign Up</h4>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				</div>
+				<div class="modal-body">
+					<form method="post" class="form col-md-12 center-block" action="/">
+						<div class="form-group">
+							<input type="text" class="form-control input-lg" name="newUsername" placeholder="Username">
+						</div>
+						<div class="form-group">
+							<input type="password" class="form-control input-lg" name="newPassword" placeholder="Password">
+						</div>
+						<div class="form-group">
+							<input type="submit" name="signup" value="Sign Up">
+						</div>
+					</form>
+				</div>
+				<div class="modal-footer">
+				</div>
+			</div>
+			<!-- /.modal-content -->
+		</div>
+		<!-- /.modal-dialog -->
+	</div>
+	<!-- /.modal -->
+	
+	<!--Login model-->
+	<div id="loginModal" class="modal fade" style="">
+		<div class="modal-dialog" style="position:relative;top:137px;width:1000px;height:350px;">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 class="modal-title">Login</h4>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				</div>
+				<div class="modal-body">
+					<form method="post" class="form col-md-12 center-block" action="/">
+						<div class="form-group">
+							<input type="text" class="form-control input-lg" name="username" placeholder="Username">
+						</div>
+						<div class="form-group">
+							<input type="password" class="form-control input-lg" name="password" placeholder="Password">
+						</div>
+						<div class="form-group">
+							<input type="submit" name="signin" value="Sign In">
+						</div>
+					</form>
+				</div>
+				<div class="modal-footer">
+				</div>
+			</div>
+			<!-- /.modal-content -->
+		</div>
+		<!-- /.modal-dialog -->
+	</div>
+	<!-- /.modal -->
+
+	<!-- Bootstrap core JavaScript -->
+	<script src="static/jquery/jquery.min.js"></script>
+	<script src="static/bootstrap/js/bootstrap.bundle.min.js"></script>
+	<script src="static/js/jquery-1.11.1.min.js"></script>
+	<script src="static/js/plugins.js"></script>
+	<script src="static/js/app.js"></script>
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</body>
+
+</html>

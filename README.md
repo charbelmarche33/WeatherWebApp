@@ -38,7 +38,7 @@ password1
 Git Push:
 git add *
 git commit -m ""
-git push https://github.com/charbelmarche33/WeatherWebApp
+git push addressofrepository
 
 If you are on Debian/Ubuntu, you can get all the dependencies required to build Matplotlib with:
 sudo apt-get build-dep python-matplotlib

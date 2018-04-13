@@ -30,12 +30,26 @@ password = False
 key = "447f7d449acdbcbda631c51d6b696ebc"
 
 def connectToDB():
-    connectionString = 'dbname=world user=weatherapp password=password1 host=localhost'
+    connectionString = 'dbname=world user=weatherapp password=Password1 host=localhost'
     try:
         return psycopg2.connect(connectionString)
     except:
         print("Cannot connect to DB")
         
+@application.route('/pastsearches', methods=['GET', 'POST'])
+def pastSearches():
+    if(session['username'] == ''):
+        #User is not logged in, redirect to main page
+        return redirect(url_for('mainIndex'))
+    conn = connectToDB()
+    curr = conn.cursor()
+    print(curr.mogrify("SELECT * FROM pastsearches where username = %s;", (session['username'], )))
+    curr.execute("SELECT * FROM pastsearches where username = %s;", (session['username'], ))
+    results = curr.fetchall()
+    results.reverse()
+    return render_template('pastsearches.html', username=session['username'], results=results)
+    
+    
 @application.route('/signout', methods=['GET', 'POST'])
 def logout():
     #This is a dummy function that the link that logs users out refers to. No page is loaded here
@@ -53,56 +67,58 @@ def mainIndex():
         #Session ensures that the logged in status remains across tabs and clicks. It is a variable stored in the cache of the browser being used!
         #ALSO NOTE that username is used in the index file as a way to tell if anyone is logged in!
         session['username'] = ''
-    
-    #Starts off true, even tho noone is logged in so that when they view the log in pop up
-    #they don't see an error message
-    validSignUpCredentials = True
-    validLogInCredentials = True
-    validDate = True
-    validLocation = True
-    isZip = True
-    
-    years = np.arange(0,10,5)
-    weekdayName = ""
-    totalDates = ""
-    totalDates1 = ""
-    totalDates2 = ""
-    totalDates3 = ""
-    totalDates4 = ""
-    now = datetime.datetime.now()
-    todaysDate = now.strftime("%Y-%m-%d")
-    TodaysDate = time.mktime(datetime.datetime.strptime(todaysDate, "%Y-%m-%d").timetuple())
-    conn = connectToDB()
-    curr = conn.cursor()
-    lowTemp = ""
-    highTemp = ""
-    precip = ""
-    wind = ""
-    humidity = ""
-    currentTemp = ""
-    location = ""
-    currentTempBool = ""
-    date = ""
-    unixDate = ""
-    getLocation= ""
-    wicon = ""
-    todayicon = "static/images/icons/icon-umberella.png"
-    precipType = ""
-    average_temperature = 0
-    average_temperature1 = 0
-    average_temperature2 = 0
-    average_temperature3 = 0
-    average_temperature4 = 0
-    totalTime = ""
-    timestr = ""
-    timestr1 = ""
-    timestr2 = ""
-    timestr3 = ""
-    timestr4 = ""
-    plotFred= True
-    plotCharlottesville = True
-    plotHonolulu = True
-    plotRichmond = True
+        
+    #I put this stupid if statement here just so i can hide all this stuff
+    if (True):
+        #Starts off true, even tho noone is logged in so that when they view the log in pop up
+        #they don't see an error message
+        validSignUpCredentials = True
+        validLogInCredentials = True
+        validDate = True
+        validLocation = True
+        isZip = True
+        
+        years = np.arange(0,10,5)
+        weekdayName = ""
+        totalDates = ""
+        totalDates1 = ""
+        totalDates2 = ""
+        totalDates3 = ""
+        totalDates4 = ""
+        now = datetime.datetime.now()
+        todaysDate = now.strftime("%Y-%m-%d")
+        TodaysDate = time.mktime(datetime.datetime.strptime(todaysDate, "%Y-%m-%d").timetuple())
+        conn = connectToDB()
+        curr = conn.cursor()
+        lowTemp = ""
+        highTemp = ""
+        precip = ""
+        wind = ""
+        humidity = ""
+        currentTemp = ""
+        location = ""
+        currentTempBool = ""
+        date = ""
+        unixDate = ""
+        getLocation= ""
+        wicon = ""
+        todayicon = "static/images/icons/icon-umberella.png"
+        precipType = ""
+        average_temperature = 0
+        average_temperature1 = 0
+        average_temperature2 = 0
+        average_temperature3 = 0
+        average_temperature4 = 0
+        totalTime = ""
+        timestr = ""
+        timestr1 = ""
+        timestr2 = ""
+        timestr3 = ""
+        timestr4 = ""
+        plotFred= True
+        plotCharlottesville = True
+        plotHonolulu = True
+        plotRichmond = True
     if request.method == 'POST':
         print("Here in main in post")
         try:
@@ -188,10 +204,13 @@ def mainIndex():
                             latLong = curr.fetchone()
                             if latLong:
                                 print(latLong)
+                                if (isZip):
+                                    #Did this so that if zip dylons tabbles dont cause crashes
+                                    location = latLong[2] + ',' + latLong[3]
+                                    location = location.split(',')
+                                    getLocation = latLong[2] + ', ' + latLong[3]
                                 latitude = latLong[0]
                                 longitude = latLong[1]
-                                if (isZip):
-                                    getLocation = latLong[2] + ', ' + latLong[3]
                                 print(latLong)
                                 latitude = latLong[0]
                                 longitude = latLong[1]
@@ -232,7 +251,6 @@ def mainIndex():
                                 while plotFred:
                                     latitude1 = 38.30318370
                                     longitude1 = -77.46053990
-                                    print "this worked 0"
                                     for i in years1:
                                     
                                         # Loop that returns the correct date that corresponds with the 
@@ -277,7 +295,6 @@ def mainIndex():
                                 while plotCharlottesville:
                                     latitude2 = 38.02930590
                                     longitude2 = -78.47667810
-                                    print "this worked 0"
                                     for k in years2:
                                     
                                         # Loop that returns the correct date that corresponds with the 
@@ -323,7 +340,6 @@ def mainIndex():
                                 while plotHonolulu:
                                     latitude3 = 21.30694440
                                     longitude3 = -157.85833330
-                                    print "this worked 0"
                                     for h in years3:
                                     
                                         # Loop that returns the correct date that corresponds with the 
@@ -368,7 +384,6 @@ def mainIndex():
                                 while plotRichmond:
                                     latitude4 = 37.55375750
                                     longitude4 = -77.46026170
-                                    print "this worked 0"
                                     for j in years4:
                                     
                                         # Loop that returns the correct date that corresponds with the 
@@ -410,7 +425,6 @@ def mainIndex():
                                     plotRichmond = False
                                     
                                     
-                                print "this worked 1"
                                 # Location user chooses
                                 for y in years:
                                     
@@ -450,22 +464,19 @@ def mainIndex():
                                 #Creates an image file with the timestamp in the name so the image is always refreshed in window
                                 timestr = now.strftime("%Y%m%d-%H%M%S")
                                 plt.savefig('static/images/'+timestr+'.png')
-                                print "this worked 2"
                                 #if within next seven days give current 
                                 if date <= (TodaysDate + (86400*7)):
                                     try:
-                                        print "this worked 3"
                                         #Allows you to access your JSON data easily within your code. Includes built in JSON decoder
                                         apiCall = "https://api.darksky.net/forecast/" + key + "/" + str(latitude) + "," + str(longitude) + "," + str(int(date)) + "?exclude=minutely,hourly,alerts,flags"
                                         #Request to access API
-                                        print "this worked 4"
                                         response = requests.get(apiCall)
                                         #Creates python dictionary from JSON weather information from API
                                         weatherData = response.json()
                                         #Set date equal to todays date and change format
                                         date = datetime.datetime.fromtimestamp(date)
                                         date = date.date()
-                                        print "this worked 5"
+                                        weekdayName = date.strftime("%A")
                                         #Daily data information
                                         dailyData = weatherData['daily']['data'][0]
                                         #Currently data information
@@ -506,9 +517,7 @@ def mainIndex():
                                             todayicon = "static/images/icons/icon-11.svg"
                                         if wicon == "tornado":
                                             todayicon = "static/images/icons/icon-8.svg"
-                                        
-                                    
-                                        
+                
                                     except:
                                         print("Call to api failed in next 7 days")
                                 else:
@@ -522,6 +531,7 @@ def mainIndex():
                                         #Set date equal to todays date and change format
                                         date = datetime.datetime.fromtimestamp(date)
                                         date = date.date()
+                                        weekdayName = date.strftime("%A")
                                         #print(weatherData)
                                         #Daily data information
                                         dailyData = weatherData['daily']['data'][0]
@@ -605,7 +615,18 @@ def mainIndex():
         getLocation = getLocation.translate(None, '\'[!@#$]')
         getLocation = getLocation.replace("",'')
         
-    print("get loc " + getLocation)
+    #This is going to add to the past searches
+    if (session['username'] != '' and getLocation != '' and validLocation and validDate):
+        print(getLocation)
+        print(date)
+        print(session['username'])
+        query = curr.mogrify("INSERT into pastsearches (username, locationSearched, dateSearched) VALUES (%s,%s,%s);", (session['username'], getLocation, date))
+        print(query)
+        curr.execute(query)
+        conn.commit()
+        curr.execute("SELECT * FROM pastsearches;")
+        res = curr.fetchall()
+        print(res)
     return render_template('index.html', username=session['username'], validSignUpCredentials=validSignUpCredentials, 
                                         validLogInCredentials=validLogInCredentials, results=results, date=date, unixDate = unixDate, 
                                         todaysDate=todaysDate, TodaysDate=TodaysDate, weekdayName=weekdayName, average_temperature=average_temperature, lowTemp=lowTemp, 
