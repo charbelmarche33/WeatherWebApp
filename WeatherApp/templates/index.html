@@ -120,7 +120,7 @@
 						</div>
 						<!-- .forecast-header -->
 						<div class="forecast-content">
-							<div class="location">{{getLocation}}</div>
+							<div class="location"><font size = "6">{{getLocation}}</font></div>
 							<div class="degree">
 								{%if currentTempBool == True%}
 									<div class="num">{{currentTemp}}<sup>o</sup>F</div>				
@@ -136,38 +136,25 @@
 							</div>
 
 							{%if unixDate <= (TodaysDate + (86400*7)) %}
-								<p align="right">
 								<span><img src="static/images/icon-umberella@2x.png" alt=""><font size="6">{{precip}}%</font></span>
-								</p>
-								<p align="right">
 								<span><img src="static/images/icon-wind@2x.png" alt=""><font size="6">{{wind}}mph</font></span>
-								</p>
-								<p align="right">
 								<span><font size="6">Humidity: {{humidity}}%</font></span>
-								</p>
-								<p align="right">
 								<span><font size="6">High: {{highTemp}}°F</font></span>
-								</p>
-								<p align="right">
 								<span><font size="6">Low: {{lowTemp}}°F</font></span>
-								</p>
-								<p align="right">
-								<span><font size="6">Weather Type: {{wicon}}</font></span>
+								<span><center><font size="6">Weather Type: {{wicon}}</font></center></span>
+								<p>
+								<span><center><font size = "6">Average temperature for temperatures in graph: {{average}}°F</font></center></span>
 								</p>
 								<span><center><img src="static/images/{{timestr}}.png" alt=""></center></span>
-								
 							{% endif %}	
-							{%if unixDate > (TodaysDate + (86400*7)) %}
-								<p align="right">
+							{%if unixDate > (TodaysDate + (86400*7)) %}<p align="right">
+								<center>
 								<span><font size="6">High: {{highTemp}}°F</font></span>
-								</p>
-								<p align="right">
 								<span><font size="6">Low: {{lowTemp}}°F</font></span>
+								</center>
+								<p>
+								<span><center><font size = "6">Average temperature for temperatures in graph: {{average}}°F</font></center></span>
 								</p>
-								<span></span>
-								<span></span>
-								<span></span>
-								<span></span>
 								<span><center><img src="static/images/{{timestr}}.png" alt=""></center></span>
 							{% endif %}
 						</div>

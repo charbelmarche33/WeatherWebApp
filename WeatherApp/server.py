@@ -27,7 +27,7 @@ app.secret_key = os.urandom(24).encode('hex')
 application = app
 
 password = False
-key = "447f7d449acdbcbda631c51d6b696ebc"
+key = "d9929daf1c0c94de0546002bbcf12c5c"
 
 def connectToDB():
     connectionString = 'dbname=world user=weatherapp password=Password1 host=localhost'
@@ -109,16 +109,18 @@ def mainIndex():
         average_temperature2 = 0
         average_temperature3 = 0
         average_temperature4 = 0
-        totalTime = ""
+        totalTemp = 0
+        avg = 0
+        average = 0
         timestr = ""
         timestr1 = ""
         timestr2 = ""
         timestr3 = ""
         timestr4 = ""
-        plotFred= True
-        plotCharlottesville = True
-        plotHonolulu = True
-        plotRichmond = True
+        plotFred= False
+        plotCharlottesville = False
+        plotHonolulu = False
+        plotRichmond = False
     if request.method == 'POST':
         print("Here in main in post")
         try:
@@ -205,10 +207,11 @@ def mainIndex():
                             if latLong:
                                 print(latLong)
                                 if (isZip):
-                                    #Did this so that if zip dylons tabbles dont cause crashes
+                                    #Did this so that if zip dylons tables dont cause crashes
                                     location = latLong[2] + ',' + latLong[3]
                                     location = location.split(',')
                                     getLocation = latLong[2] + ', ' + latLong[3]
+                                    print("Its zip")
                                 latitude = latLong[0]
                                 longitude = latLong[1]
                                 print(latLong)
@@ -264,7 +267,6 @@ def mainIndex():
                                         else:
                                             newDate1 = newDate1 - i - oneDay
                                           
-                                    
                                         a1 = "https://api.darksky.net/forecast/" + key + "/" + str(latitude1) + "," + str(longitude1) + "," + str(int(newDate1)) + "?exclude=minutely,hourly,alerts,flags"
                                         r1 = requests.get(a1)
                                         data1 = r1.json()
@@ -284,8 +286,8 @@ def mainIndex():
                                     plt1.bar(len_average_temperature1, average_temperature1, align="center", alpha=0.5)
                                     plt1.xticks(len_average_temperature1, totalDates1)
                                     plt1.xlabel("Date (Y-M-D)", fontsize=10)
-                                    plt1.ylabel("Average Temperature in Fahrenheit", fontsize=10)
-                                    plt1.title("Average Temperature for Each Half Decade in Fredericksburg, VA", fontsize=12)
+                                    plt1.ylabel("Temperature in Fahrenheit", fontsize=10)
+                                    plt1.title("Temperature for Each Half Decade in Fredericksburg, VA", fontsize=12)
                                     #Creates an image file with the timestamp in the name so the image is always refreshed in window
                                     timestr1 = now.strftime("%Y%m%d-%H%M%S")
                                     plt1.savefig('static/images/'+timestr1+"moretime"'.png')
@@ -328,14 +330,13 @@ def mainIndex():
                                     plt2.bar(len_average_temperature2, average_temperature2, align="center", alpha=0.5)
                                     plt2.xticks(len_average_temperature2, totalDates2)
                                     plt2.xlabel("Date (Y-M-D)", fontsize=10)
-                                    plt2.ylabel("Average Temperature in Fahrenheit", fontsize=10)
-                                    plt2.title("Average Temperature for Each Half Decade in Charlottesville, VA", fontsize=12)
+                                    plt2.ylabel("Temperature in Fahrenheit", fontsize=10)
+                                    plt2.title("Temperature for Each Half Decade in Charlottesville, VA", fontsize=12)
                                     #Creates an image file with the timestamp in the name so the image is always refreshed in window
                                     timestr2 = now.strftime("%Y%m%d-%H%M%S")
                                     plt2.savefig('static/images/'+timestr2+"moretime2"'.png')
                                     plotCharlottesville = False
-                                    
-                                    
+                                      
                                 # Honolulu, HI   
                                 while plotHonolulu:
                                     latitude3 = 21.30694440
@@ -373,8 +374,8 @@ def mainIndex():
                                     plt3.bar(len_average_temperature3, average_temperature3, align="center", alpha=0.5)
                                     plt3.xticks(len_average_temperature3, totalDates3)
                                     plt3.xlabel("Date (Y-M-D)", fontsize=10)
-                                    plt3.ylabel("Average Temperature in Fahrenheit", fontsize=10)
-                                    plt3.title("Average Temperature for Each Half Decade in Charlottesville, VA", fontsize=12)
+                                    plt3.ylabel("Temperature in Fahrenheit", fontsize=10)
+                                    plt3.title("Temperature for Each Half Decade in Charlottesville, VA", fontsize=12)
                                     #Creates an image file with the timestamp in the name so the image is always refreshed in window
                                     timestr3 = now.strftime("%Y%m%d-%H%M%S")
                                     plt3.savefig('static/images/'+timestr3+"moretime3"'.png')
@@ -417,14 +418,13 @@ def mainIndex():
                                     plt4.bar(len_average_temperature4, average_temperature4, align="center", alpha=0.5)
                                     plt4.xticks(len_average_temperature4, totalDates4)
                                     plt4.xlabel("Date (Y-M-D)", fontsize=10)
-                                    plt4.ylabel("Average Temperature in Fahrenheit", fontsize=10)
-                                    plt4.title("Average Temperature for Each Half Decade in Charlottesville, VA", fontsize=12)
+                                    plt4.ylabel("Temperature in Fahrenheit", fontsize=10)
+                                    plt4.title("Temperature for Each Half Decade in Charlottesville, VA", fontsize=12)
                                     #Creates an image file with the timestamp in the name so the image is always refreshed in window
                                     timestr4 = now.strftime("%Y%m%d-%H%M%S")
                                     plt4.savefig('static/images/'+timestr4+"moretime4"'.png')
                                     plotRichmond = False
-                                    
-                                    
+                                        
                                 # Location user chooses
                                 for y in years:
                                     
@@ -451,7 +451,10 @@ def mainIndex():
                                     totalDates = np.append(totalDates, d)
                                     # Gets average temp at each year and stores value in an array
                                     average_temperature[count] = c
+                                    totalTemp += c
                                     count+=1
+                                avg = totalTemp/5
+                                average = int(avg)
                                 len_average_temperature = np.arange(len(average_temperature))
                                 plt.cla()   # Clear axis
                                 plt.clf()   # Clear figure
@@ -459,8 +462,8 @@ def mainIndex():
                                 plt.bar(len_average_temperature, average_temperature, align="center", alpha=0.5)
                                 plt.xticks(len_average_temperature, totalDates)
                                 plt.xlabel("Date (Y-M-D)", fontsize=10)
-                                plt.ylabel("Average Temperature in Fahrenheit", fontsize=10)
-                                plt.title("Average Temperature for Each Half Decade in " + str(location[0]) +", "+ str(location[1]), fontsize=12)
+                                plt.ylabel("Temperature in Fahrenheit", fontsize=10)
+                                plt.title("Temperature for Each Half Decade in " + str(location[0]) + ", " + str(location[1]), fontsize=12)
                                 #Creates an image file with the timestamp in the name so the image is always refreshed in window
                                 timestr = now.strftime("%Y%m%d-%H%M%S")
                                 plt.savefig('static/images/'+timestr+'.png')
@@ -632,7 +635,7 @@ def mainIndex():
                                         todaysDate=todaysDate, TodaysDate=TodaysDate, weekdayName=weekdayName, average_temperature=average_temperature, lowTemp=lowTemp, 
                                         highTemp=highTemp, precip=precip, precipType=precipType, currentTemp=currentTemp, wind=wind, humidity=humidity, 
                                         getLocation=getLocation, todayicon=todayicon, wicon=wicon, validDate=validDate, validLocation=validLocation, 
-                                        currentTempBool=currentTempBool, timestr=timestr, timestr1=timestr1, timestr2=timestr2, timestr3=timestr3, timestr4=timestr4)
+                                        currentTempBool=currentTempBool, timestr=timestr, timestr1=timestr1, timestr2=timestr2, timestr3=timestr3, timestr4=timestr4, average=average)
     
     
 #Start the server here
