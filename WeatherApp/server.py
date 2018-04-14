@@ -451,23 +451,32 @@ def mainIndex():
                                     totalDates = np.append(totalDates, d)
                                     # Gets average temp at each year and stores value in an array
                                     average_temperature[count] = c
+                                    # Gets total of temperatures in graph
                                     totalTemp += c
+                                    # Counter for average_temperature array
                                     count+=1
+                                # Gets average temperature for graph as float
                                 avg = totalTemp/5
+                                # Converts avg to int
                                 average = int(avg)
+                                # Gets temperatures in graph in chronological order
+                                new_average_temperature = average_temperature[np.array([4, 3, 2, 1, 0])]
+                                # Gets dates in graph in chronological order
+                                new_totalDates = totalDates[np.array([4, 3, 2, 1, 0])]
+                                # Gets length of average_temperature
                                 len_average_temperature = np.arange(len(average_temperature))
                                 plt.cla()   # Clear axis
                                 plt.clf()   # Clear figure
                                 #Plots bar graph for average temp for each half decade of given location
-                                plt.bar(len_average_temperature, average_temperature, align="center", alpha=0.5)
-                                plt.xticks(len_average_temperature, totalDates)
+                                plt.bar(len_average_temperature, new_average_temperature, align="center", color = "dodgerblue", edgecolor = "dodgerblue", alpha=0.5)
+                                plt.xticks(len_average_temperature, new_totalDates)
                                 plt.xlabel("Date (Y-M-D)", fontsize=10)
                                 plt.ylabel("Temperature in Fahrenheit", fontsize=10)
                                 plt.title("Temperature for Each Half Decade in " + str(location[0]) + ", " + str(location[1]), fontsize=12)
                                 #Creates an image file with the timestamp in the name so the image is always refreshed in window
                                 timestr = now.strftime("%Y%m%d-%H%M%S")
                                 plt.savefig('static/images/'+timestr+'.png')
-                                #if within next seven days give current 
+                                # If within next seven days give current 
                                 if date <= (TodaysDate + (86400*7)):
                                     try:
                                         #Allows you to access your JSON data easily within your code. Includes built in JSON decoder

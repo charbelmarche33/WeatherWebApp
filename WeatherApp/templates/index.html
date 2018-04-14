@@ -123,7 +123,7 @@
 							<div class="location"><font size = "6">{{getLocation}}</font></div>
 							<div class="degree">
 								{%if currentTempBool == True%}
-									<div class="num">{{currentTemp}}<sup>o</sup>F</div>				
+									<div class="num">{{currentTemp}}<sup>o</sup>F</div>	
 								{% endif %}
 								{%if currentTempBool == ""%}
 									<div class="num">{{highTemp}}</div>				
@@ -143,7 +143,7 @@
 								<span><font size="6">Low: {{lowTemp}}°F</font></span>
 								<span><center><font size="6">Weather Type: {{wicon}}</font></center></span>
 								<p>
-								<span><center><font size = "6">Average temperature for temperatures in graph: {{average}}°F</font></center></span>
+								<span><center><font size = "6">Average Temperature: {{average}}°F</font></center></span>
 								</p>
 								<span><center><img src="static/images/{{timestr}}.png" alt=""></center></span>
 							{% endif %}	
