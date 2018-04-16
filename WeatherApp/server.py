@@ -1,5 +1,6 @@
-import os, time, os.path, psycopg2, psycopg2.extras, requests
 from flask import Flask, render_template, request, session, redirect, url_for
+app = Flask(__name__)
+import os, time, os.path, psycopg2, psycopg2.extras, requests
 #Need this for calendar widget
 import datetime
 #Need these lines so drop down by location will work
@@ -21,7 +22,6 @@ import Image
 reload(sys)  
 sys.setdefaultencoding('utf8')
 #Need these lines so drop down by location will work
-
 app = Flask(__name__)
 app.secret_key = os.urandom(24).encode('hex')
 application = app

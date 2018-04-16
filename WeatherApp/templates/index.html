@@ -52,7 +52,7 @@
 						<li class="menu-item current-menu-item"><a href="/signout">Sign Out</a></li>
 						<li class="menu-item current-menu-item"><a href="/pastsearches">View Past Searches</a></li>
 						{%endif%}
-						<li class="menu-item current-menu-item"><a href="/">About</a></li>
+						<li class="menu-item current-menu-item"><a href="#about">About</a></li>
 					</ul>
 					<!-- .menu -->
 				</div>
@@ -65,7 +65,7 @@
 		<!-- .site-header -->
 
 		<!--****************Make a small instructions prompt here**************************-->
-		<div class="hero" data-bg-image="static/images/banner.png">
+		<div class="hero" data-bg-image="static/images/cscape1.jpeg">
 			<div class="container">
 				{%if validLocation == False%}
 				<h3 style="color:#cc0000;background-color:#1e202b;">Invalid Location: Please enter a location in either the "city, state" format or as a 5 letter zipcode.</h3>
@@ -202,25 +202,30 @@
 		<!-- .main-content -->
 
 		<footer class="site-footer">
-			<div class="container">
-				<div class="row">
-					<div class="col-md-8">
-						<form action="#" class="subscribe-form">
-							<input type="text" placeholder="Enter your email to subscribe...">
-							<input type="submit" value="Subscribe">
-						</form>
-					</div>
-					<div class="col-md-3 col-md-offset-1">
-						<div class="social-links">
-							<a href="#"><i class="fa fa-facebook"></i></a>
-							<a href="#"><i class="fa fa-twitter"></i></a>
-							<a href="#"><i class="fa fa-google-plus"></i></a>
-							<a href="#"><i class="fa fa-pinterest"></i></a>
-						</div>
-					</div>
-				</div>
+			<div id="about" class="container">
+				
+						<p>
+						<span><center><font size = "6">Welcome to the Historical Weather App!</font></center></span>
+						<span><center><font size = "3">Are you trying to plan a wedding and would like to know if it’s more likely to rain or shine on your special day? </font></center></span>
+						<span><center><font size = "3">Or planning any event at all and want to know what the weather prediction for that day is? </font></center></span>
+						<span><center><font size = "3">Then this app is for you! </font></center></span>
+						</p>
+						<p>
+						<span><center><font size = "3">The Historical Weather App was created for anyone looking for a future weather forecast on a specific day and location </font></center></span>
+						<span><center><font size = "3">inside the United States.  This is accomplished by compiling years of weather data for that day and location, and returning </font></center></span>
+						<span><center><font size = "3">the averages of the data to give a prediction of what the weather will be.  Of course you could be looking for the current </font></center></span>
+						<span><center><font size = "3">forecast, and that’s here too!  Any date chosen that falls within a seven day range of the current date will result in the </font></center></span>
+						<span><center><font size = "3">current forecast with more weather information about that day. </font></center></span>
+						</p>
+						<p>
+						<span><center><font size = "3">To begin, enter a city name, zipcode or state into the location search bar.</font></center></span>
+						<span><center><font size = "3">Next, select any date from the drop down calendar.</font></center></span>
+						<span><center><font size = "3">Click on Search Weather Data! and your weather prediction will soon appear!</font></center></span>
+						</p>
+						<p></p>
+						<p></p>
 
-				<p class="colophon">Copyright 2018. University of Mary Washington Computer Science 430. Designed by Charbel Marche, Rachel Mooney, and Dylon Garrett.</p>
+				<p class="colophon"><center>Copyright 2018. University of Mary Washington Computer Science 430. Designed by Charbel Marche, Rachel Mooney, and Dylon Garrett.</center></p>
 			</div>
 		</footer>
 		<!-- .site-footer -->
