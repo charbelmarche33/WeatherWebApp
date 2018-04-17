@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, session, redirect, url_for
-from importlib import reload
+#from importlib import reload
 app = Flask(__name__)
 import os, time, os.path, psycopg2, psycopg2.extras, requests
 #Need this for calendar widget
@@ -18,10 +18,10 @@ import matplotlib.pyplot as plt2
 import matplotlib.pyplot as plt3
 import matplotlib.pyplot as plt4
 import numpy as np
-#import Image
+
 
 reload(sys)  
-#sys.setdefaultencoding('utf8')
+sys.setdefaultencoding('utf8')
 #Need these lines so drop down by location will work
 app = Flask(__name__)
 app.secret_key = os.urandom(24).encode('hex')

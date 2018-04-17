@@ -1,11 +1,11 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "896602319596e9a26d357e74dc002cb51701bdf2d5ff55759a74f80c7ea7952e"
+            "sha256": "f966472f21b63bedfba82d64fa5e7b5467575a5e59daa07dde3a472026d6ff19"
         },
         "pipfile-spec": 6,
         "requires": {
-            "python_version": "3.6"
+            "python_version": "2.7"
         },
         "sources": [
             {
@@ -43,13 +43,6 @@
                 "sha256:cd7b2d1018258d7247a71425e9f26463dfb444d411c39569972f4ce586b0c9d8"
             ],
             "version": "==0.10.0"
-        },
-        "django": {
-            "hashes": [
-                "sha256:2d8b9eed8815f172a8e898678ae4289a5e9176bc08295676eff4228dd638ea61",
-                "sha256:d81a1652963c81488e709729a80b510394050e312f386037f26b54912a3a10d0"
-            ],
-            "version": "==2.0.4"
         },
         "flask": {
             "hashes": [
