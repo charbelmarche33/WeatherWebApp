@@ -33,7 +33,7 @@ key = "d9929daf1c0c94de0546002bbcf12c5c"
 def connectToDB():
     connectionString = 'dbname=world user=weatherapp password=Password1 host=localhost'
     try:
-        return psycopg2.connect(connectionString)
+        return psycopg2.connect(os.environ['DATABASE_URL'])
     except:
         print("Cannot connect to DB")
         
