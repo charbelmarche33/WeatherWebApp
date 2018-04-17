@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, session, redirect, url_for
+from importlib import reload
 app = Flask(__name__)
 import os, time, os.path, psycopg2, psycopg2.extras, requests
 #Need this for calendar widget
