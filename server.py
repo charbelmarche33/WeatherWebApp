@@ -17,7 +17,7 @@ import matplotlib.pyplot as plt2
 import matplotlib.pyplot as plt3
 import matplotlib.pyplot as plt4
 import numpy as np
-import Image
+#import Image
 
 reload(sys)  
 sys.setdefaultencoding('utf8')
