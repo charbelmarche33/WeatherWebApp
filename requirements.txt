@@ -14,7 +14,7 @@ idna==2.6
 ipaddress==1.0.22
 kiwisolver==1.0.1
 matplotlib==2.2.2
-numpy==1.14.2
+numpy==1.9.2
 ordereddict==1.1
 pathlib2==2.1.0
 pipenv==11.10.0
