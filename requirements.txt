@@ -1,4 +1,4 @@
-altgraph==0.102
+altgraph==0.10.2
 asn1crypto==0.24.0
 astroid==1.6.1
 backports.functools-lru-cache==1.5
