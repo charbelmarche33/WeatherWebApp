@@ -21,7 +21,7 @@ import numpy as np
 #import Image
 
 reload(sys)  
-sys.setdefaultencoding('utf8')
+#sys.setdefaultencoding('utf8')
 #Need these lines so drop down by location will work
 app = Flask(__name__)
 app.secret_key = os.urandom(24).encode('hex')
