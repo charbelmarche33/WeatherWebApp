@@ -67,7 +67,6 @@ def mainIndex():
     except:
         #Session ensures that the logged in status remains across tabs and clicks. It is a variable stored in the cache of the browser being used!
         #ALSO NOTE that username is used in the index file as a way to tell if anyone is logged in!
-		print('Not logged in')
         session['username'] = ''
         
     #I put this stupid if statement here just so i can hide all this stuff
