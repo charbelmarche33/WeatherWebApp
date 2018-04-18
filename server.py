@@ -48,7 +48,7 @@ def pastSearches():
     curr.execute("SELECT * FROM pastsearches where username = %s;", (session.get('username'), ))
     results = curr.fetchall()
     results.reverse()
-    return render_template('pastsearches.html', username=session.get('username'), results=results)
+    return render_template('pastsearches.html', username=session['username'], results=results)
     
     
 @application.route('/signout', methods=['GET', 'POST'])
