@@ -24,7 +24,7 @@ reload(sys)
 sys.setdefaultencoding('utf8')
 #Need these lines so drop down by location will work
 app = Flask(__name__)
-app.secret_key = os.urandom(24).encode('hex')
+app.secret_key = 'xJei2dja8asm093ldsu216gbe'.encode('hex')
 application = app
 
 password = False
