@@ -39,7 +39,7 @@ def connectToDB():
         
 @application.route('/pastsearches', methods=['GET', 'POST'])
 def pastSearches():
-    if(session['username'] == ''):
+    if(session.get('username') == ''):
         #User is not logged in, redirect to main page
         return redirect(url_for('mainIndex'))
     conn = connectToDB()
