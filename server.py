@@ -48,7 +48,7 @@ def pastSearches():
     curr.execute("SELECT * FROM pastsearches where username = %s;", (session['username'], ))
     results = curr.fetchall()
     results.reverse()
-    return render_template('pastsearches.html', username=session['username'], results=results)
+    return render_template('pastsearches.html', username=session.get('username'), results=results)
     
     
 @application.route('/signout', methods=['GET', 'POST'])
@@ -640,7 +640,7 @@ def mainIndex():
         curr.execute("SELECT * FROM pastsearches;")
         res = curr.fetchall()
         print(res)
-    return render_template('index.html', username=session['username'], validSignUpCredentials=validSignUpCredentials, 
+    return render_template('index.html', username=session.get('username'), validSignUpCredentials=validSignUpCredentials, 
                                         validLogInCredentials=validLogInCredentials, results=results, date=date, unixDate = unixDate, 
                                         todaysDate=todaysDate, TodaysDate=TodaysDate, weekdayName=weekdayName, average_temperature=average_temperature, lowTemp=lowTemp, 
                                         highTemp=highTemp, precip=precip, precipType=precipType, currentTemp=currentTemp, wind=wind, humidity=humidity, 
