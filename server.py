@@ -63,10 +63,11 @@ def mainIndex():
     #If the user name hasn't been created yet then set to '' otherwise someone is logged in dont
     #The try will break and make you go to the except where you set username to ''
     try:
-        print('User: ' + session['username'])
+        print('User: ' + session.get('username'))
     except:
         #Session ensures that the logged in status remains across tabs and clicks. It is a variable stored in the cache of the browser being used!
         #ALSO NOTE that username is used in the index file as a way to tell if anyone is logged in!
+		print('Not logged in')
         session['username'] = ''
         
     #I put this stupid if statement here just so i can hide all this stuff
