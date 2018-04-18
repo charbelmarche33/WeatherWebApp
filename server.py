@@ -39,13 +39,13 @@ def connectToDB():
         
 @application.route('/pastsearches', methods=['GET', 'POST'])
 def pastSearches():
-    if(session['username'] == ''):
+    if(session.get('username') == ''):
         #User is not logged in, redirect to main page
         return redirect(url_for('mainIndex'))
     conn = connectToDB()
     curr = conn.cursor()
-    print(curr.mogrify("SELECT * FROM pastsearches where username = %s;", (session['username'], )))
-    curr.execute("SELECT * FROM pastsearches where username = %s;", (session['username'], ))
+    print(curr.mogrify("SELECT * FROM pastsearches where username = %s;", (session.get('username'), )))
+    curr.execute("SELECT * FROM pastsearches where username = %s;", (session.get('username'), ))
     results = curr.fetchall()
     results.reverse()
     return render_template('pastsearches.html', username=session.get('username'), results=results)
@@ -63,11 +63,11 @@ def mainIndex():
     #If the user name hasn't been created yet then set to '' otherwise someone is logged in dont
     #The try will break and make you go to the except where you set username to ''
     try:
-        print('User: ' + session['username'])
+        print('User: ' + session.get('username'))
     except:
         #Session ensures that the logged in status remains across tabs and clicks. It is a variable stored in the cache of the browser being used!
         #ALSO NOTE that username is used in the index file as a way to tell if anyone is logged in!
-        session['username'] = ''
+        session.get('username') = ''
         
     #I put this stupid if statement here just so i can hide all this stuff
     if (True):
@@ -629,10 +629,10 @@ def mainIndex():
         getLocation = getLocation.replace("",'')
         
     #This is going to add to the past searches
-    if (session['username'] != '' and getLocation != '' and validLocation and validDate):
+    if (session.get('username') != '' and getLocation != '' and validLocation and validDate):
         print(getLocation)
         print(date)
-        print(session['username'])
+        print(session.get('username'))
         query = curr.mogrify("INSERT into pastsearches (username, locationSearched, dateSearched) VALUES (%s,%s,%s);", (session['username'], getLocation, date))
         print(query)
         curr.execute(query)
@@ -640,6 +640,7 @@ def mainIndex():
         curr.execute("SELECT * FROM pastsearches;")
         res = curr.fetchall()
         print(res)
+	print("this is .get " + session.get('username') + " this is the regular " + session['username']) 
     return render_template('index.html', username=session.get('username'), validSignUpCredentials=validSignUpCredentials, 
                                         validLogInCredentials=validLogInCredentials, results=results, date=date, unixDate = unixDate, 
                                         todaysDate=todaysDate, TodaysDate=TodaysDate, weekdayName=weekdayName, average_temperature=average_temperature, lowTemp=lowTemp, 
