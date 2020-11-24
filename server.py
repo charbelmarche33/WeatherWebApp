@@ -43,7 +43,8 @@ def pastSearches():
         #User is not logged in, redirect to main page
         return redirect(url_for('mainIndex'))
     conn = connectToDB()
-    curr = conn.cursor()
+    with application.app_context():
+        cur = conn.connection.cursor()
     print(curr.mogrify("SELECT * FROM pastsearches where username = %s;", (session.get('username'), )))
     curr.execute("SELECT * FROM pastsearches where username = %s;", (session.get('username'), ))
     results = curr.fetchall()
