@@ -91,6 +91,8 @@ def mainIndex():
         todaysDate = now.strftime("%Y-%m-%d")
         TodaysDate = time.mktime(datetime.datetime.strptime(todaysDate, "%Y-%m-%d").timetuple())
         conn = connectToDB()
+        with application.app_context():
+            curr = conn.connection.cursor()
         curr = conn.cursor()
         lowTemp = ""
         highTemp = ""
